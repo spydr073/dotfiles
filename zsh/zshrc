@@ -1,0 +1,42 @@
+#!/usr/bin/zsh
+
+load_settings(){
+  zdir=$1
+
+  if [ -d "$zdir" ]; then
+
+    #-- load local functions
+    if [ -d "$zdir/functions" ]; then
+      for function in ~/.zsh/functions/*; do
+        source $function
+      done
+    fi
+
+    #-- if there are pre-config files, load them here
+    if [ -d "$zdir/config/pre" ]; then
+      for config in "$zdir/config"/pre/**/*(N-.); do
+        . $config
+      done
+    fi
+
+    #-- configure zsh
+    for config in "$zdir/config"/**/*(N-.); do
+      if [ -f $config ]; then
+        . $config
+      fi
+    done
+
+    #-- if there are post-config files, load them here
+    if [ -d "$zdir/config/post" ]; then
+      for config in "$zdir/config"/post/**/*(N-.); do
+        . $config
+      done
+    fi
+
+  fi
+}
+
+load_settings "$HOME/.zsh"
+
+
+

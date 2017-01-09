@@ -1,0 +1,15 @@
+# ~/.xinitrc
+
+xrdb -merge .Xresources
+
+#-- system beep
+xset -b
+
+xcompmgr -cCf -r 0 -D 2 &
+xscreensaver -no-splash &
+xsetroot -cursor_name left_ptr &
+feh --bg-scale ~/media/imgs/rain.jpg
+
+exec dbus-launch --auto-syntax --exit-with-session /usr/bin/xmonad
+
+
