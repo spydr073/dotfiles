@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/run/current-system/sw/bin/zsh
 
 load_settings(){
   zdir=$1
@@ -15,7 +15,7 @@ load_settings(){
     #-- if there are pre-config files, load them here
     if [ -d "$zdir/config/pre" ]; then
       for config in "$zdir/config"/pre/**/*(N-.); do
-        . $config
+        $config
       done
     fi
 

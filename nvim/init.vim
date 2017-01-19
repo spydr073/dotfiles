@@ -18,13 +18,15 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 "Plugins {{{2
 "-- Run ':call dein#install()' to install plugins.
 set runtimepath+=~/.config/nvim/plugins/repos/github.com/Shougo/dein.vim
-call dein#begin(expand('~/.config/nvim/plugins'))
-call dein#add('Shougo/dein.vim')
-call dein#add('Shougo/vimproc.vim')
-call dein#add('Shougo/vimshell.vim.git')
-call dein#add('scrooloose/nerdtree')
-call dein#add('idris-hackers/idris-vim.git')
-call dein#end()
+if dein#load_state(expand('~/.config/nvim/plugins/'))
+    call dein#begin(expand('~/.config/nvim/plugins/'))
+    call dein#add('Shougo/dein.vim')
+    call dein#add('Shougo/vimproc.vim')
+    call dein#add('Shougo/vimshell.vim.git')
+    call dein#add('scrooloose/nerdtree')
+    call dein#add('idris-hackers/idris-vim.git')
+    call dein#end()
+endif
 "}}}
 
 
@@ -33,19 +35,6 @@ set mouse-=a
 syntax on
 filetype on
 filetype plugin indent on
-
-
-"if exists('$TMUX')
-"  "- insert mode
-"  let &t_SI = '\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\'
-"  "- normal mode
-"  let &t_EI = '\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\'
-"  "- normal mode
-"  let &t_SR = '\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\'
-"else
-"  let &t_SI = '\<Esc>]50;CursorShape=0\x7'
-"  let &t_EI = '\<Esc>]50;CursorShape=1\x7'
-"endif
 
 "}}}
 
@@ -265,37 +254,34 @@ set laststatus=2
 set title
 set showcmd
 set display=lastline
-
 set cursorcolumn
 set cursorline
 set colorcolumn=100
 
-set list listchars=tab:»\ ,eol:·
-"set list listchars=tab:▸\ ,eol:·
-"set listchars=tab:»·,trail:·,eol:¬,nbsp:_,extends:»,precedes:«
+set list listchars=tab:»\ ,eol:·,nbsp:␣,precedes:↩,extends:↪
 
 " Vim Tab
 function! s:SID_PREFIX()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+    return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
 
 function! s:my_tabline()
-  let s = ''
-  for i in range(1, tabpagenr('$'))
-    let bufnrs = tabpagebuflist(i)
-    let bufnr = bufnrs[tabpagewinnr(i) - 1]
-    let no = i
-    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
-    let title = fnamemodify(bufname(bufnr), ':t')
-    let title = '[' . title . ']'
-    let s .= '%'.i.'T'
-    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-    let s .= no . ':' . title
-    let s .= mod
-    let s .= '%#TabLineFill# '
-  endfor
-  let s .= '%#TabLineFill#%T%=%#TabLine#'
-  return s
+    let s = ''
+    for i in range(1, tabpagenr('$'))
+        let bufnrs = tabpagebuflist(i)
+        let bufnr = bufnrs[tabpagewinnr(i) - 1]
+        let no = i
+        let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
+        let title = fnamemodify(bufname(bufnr), ':t')
+        let title = '[' . title . ']'
+        let s .= '%'.i.'T'
+        let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+        let s .= no . ':' . title
+        let s .= mod
+        let s .= '%#TabLineFill# '
+    endfor
+    let s .= '%#TabLineFill#%T%=%#TabLine#'
+    return s
 endfunction
 
 let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
@@ -307,8 +293,8 @@ set showtabline=2
 "Bindings {{{1
 "--------------------------------------------------------------------------------------------------
 let mapleader = ","
-
 nnoremap <S-r> :so ~/.config/nvim/init.vim<CR>
+
 nnoremap : ;
 nnoremap ; :
 
@@ -323,8 +309,6 @@ nnoremap <silent> [Tag]x :tabclose<CR>
 nnoremap <silent> [Tag]n :tabnext<CR>
 nnoremap <silent> [Tag]p :tabprevious<CR>
 
-"-- text zooming
-" ????
 
 nnoremap <C-h><C-l> :nohl<CR>
 nnoremap <C-L> :VimFiler -split -simple -winwidth=35 -no-quit<CR>

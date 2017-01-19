@@ -1,6 +1,6 @@
-#!/usr/bin/zsh
+#!/run/current-system/sw/bin/zsh
 
-DOTFILES="$HOME/research/dotfiles"
+DOTFILES="$HOME/dotfiles"
 
 
 #-- Link XMonad files

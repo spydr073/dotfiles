@@ -101,7 +101,7 @@ Config {
       , Run Date         "<fc=#666666,#000000>%a %F %H:%M %z</fc>"
                          "date" 10
 
-      , Run Com          "/bin/bash"
+      , Run Com          "/run/current-system/sw/bin/bash"
                          [ "-c" , "/home/spydr/.xmonad/scripts/get-volume.sh" ]
                          "volume"
                          3

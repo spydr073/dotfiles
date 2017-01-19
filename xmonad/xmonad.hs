@@ -78,12 +78,14 @@ import qualified XMonad.StackSet as W
 ---------------------------------------------------------------------------------------------------
 
 myTerminal :: String
-myTerminal = "/usr/local/bin/st -f \"VerilySerifMono:size=12\""
+myTerminal = "/run/current-system/sw/bin/termite"
+--myTerminal = "/run/current-system/sw/bin/st"
+--myTerminal = "/run/current-system/sw/bin/st -f \"VerilySerifMono:size=12\""
 --myTerminal = "/usr/local/bin/st -f \"Anonymous Pro:size=14\""
 --myTerminal = "/usr/local/bin/st -f \":size=12\""
 
 myScreensaver:: String
-myScreensaver = "/usr/bin/xscreensaver-command --lock"
+myScreensaver = "/run/current-system/sw/bin/xscreensaver-command --lock"
 
 mySelectScreenshot :: String
 mySelectScreenshot = "scrot -s"
@@ -125,8 +127,9 @@ myLayoutHook = onWorkspaces ["5"] gimpLayoutFirst $
 
     -- layouts
     tiled = maximize $ boringWindows $ avoidStruts $ noBorders $
-            smartSpacing 3 (Tall 1 (3/100) (1/2))
-    float =  avoidStruts $ floatSimpleSimple
+            smartSpacing 3 (Tall 1 (3/100) (1/3))
+            --smartSpacing 3 (Tall 1 (3/100) (1/2))
+    float =  avoidStruts $ simplestFloat
     full = smartBorders . avoidStruts $ Full
     gimp = withIM (0.11)
                   (Role "gimp-toolbox")
@@ -160,7 +163,8 @@ myManageHook = (composeAll . concat $
 
        -- program families that float
        cCenterF    = ["Kaffeine", "MPlayer", "xine", "Xmessage", "Xdialog",
-                      "Arandr", "qpdfview", "Xfe", "Display", "feh"]
+                      "Arandr", "qpdfview", "Xfe", "Display", "feh", "termite",
+                      "wicd-client.py"]
        tCenterF    = ["Plugins", "Add-ons"]
        ptCenterF   = ["About", "Open File", "Save As"]
        pcFloat     = ["Xfce4-"]
@@ -500,7 +504,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
 main :: IO ()
 main = do
-  xmobar <- spawnPipe "/home/spydr/.cabal/bin/xmobar /home/spydr/.xmonad/info_bars/xmobar.hs"
+  xmobar <- spawnPipe "/run/current-system/sw/bin/xmobar /home/spydr/.xmonad/info_bars/xmobar.hs"
   xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig {
       terminal           = myTerminal
     , focusFollowsMouse  = myFocusFollowsMouse
