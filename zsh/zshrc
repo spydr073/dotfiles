@@ -1,42 +1,238 @@
-#!/run/current-system/sw/bin/zsh
 
-load_settings(){
-  zdir=$1
+#──────────────────────────────────────────────────────────────────────────────────────────────────
+#
+#    ███████╗███████╗██╗  ██╗     ██████╗ ██████╗ ███╗   ██╗███████╗██╗ ██████╗
+#    ╚══███╔╝██╔════╝██║  ██║    ██╔════╝██╔═══██╗████╗  ██║██╔════╝██║██╔════╝
+#      ███╔╝ ███████╗███████║    ██║     ██║   ██║██╔██╗ ██║█████╗  ██║██║  ███╗
+#     ███╔╝  ╚════██║██╔══██║    ██║     ██║   ██║██║╚██╗██║██╔══╝  ██║██║   ██║
+#    ███████╗███████║██║  ██║    ╚██████╗╚██████╔╝██║ ╚████║██║     ██║╚██████╔╝
+#    ╚══════╝╚══════╝╚═╝  ╚═╝     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
+#
+#──────────────────────────────────────────────────────────────────────────────────────────────────
 
-  if [ -d "$zdir" ]; then
 
-    #-- load local functions
-    if [ -d "$zdir/functions" ]; then
-      for function in ~/.zsh/functions/*; do
-        source $function
-      done
-    fi
 
-    #-- if there are pre-config files, load them here
-    if [ -d "$zdir/config/pre" ]; then
-      for config in "$zdir/config"/pre/**/*(N-.); do
-        $config
-      done
-    fi
+#--------------------------------------------------------------------------------------[ Settings ]
+#{{{1
 
-    #-- configure zsh
-    for config in "$zdir/config"/**/*(N-.); do
-      if [ -f $config ]; then
-        . $config
-      fi
-    done
+export TERM=xterm-256color
+[ -n "$TMUX" ] && export TERM=screen-256color
 
-    #-- if there are post-config files, load them here
-    if [ -d "$zdir/config/post" ]; then
-      for config in "$zdir/config"/post/**/*(N-.); do
-        . $config
-      done
-    fi
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
 
-  fi
+#-- History settings
+HISTFILE=~/.tmux/zhistory
+HISTSIZE=4096
+SAVEHIST=4096
+
+
+setopt prompt_subst
+ZLE_RPROMPT_INDENT=1                             # set the right promt indent
+setopt PROMPT_SUBST                              # allow for functions in the prompt.
+export VISUAL=nvim                               # default viewer
+export EDITOR=$VISUAL                            # default editor
+
+
+setopt extendedglob                              # Enable extended globbing
+
+# Set fuzzy auto-completion
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=7'
+zstyle ':completion:*' matcher-list '' \
+        'm:{a-z\-}={A-Z\_}' \
+        'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+        'r:|?=** m:{a-z\-}={A-Z\_}'
+bindkey \^U backward-kill-line
+
+unsetopt nomatch                                 # allow [ or ] where ever you want
+
+autoload -U compinit && compinit                 # load autocompletions
+
+PATH="$HOME/bin:$PATH"                           # append to path
+export -U PATH                                   # export path var
+#}}}
+
+
+#-----------------------------------------------------------------------------------------[ Hooks ]
+#{{{1
+
+function precmd() {
+  print ""
 }
 
-load_settings "$HOME/.zsh"
+function preexec() {
+}
+
+function chpwd() {
+}
+
+#}}}
+
+
+#---------------------------------------------------------------------------------------[ Aliases ]
+#{{{
+alias ls='ls --color -kLNost'
+alias reload='source ~/.zshrc; clear'
+alias pp='ps axuf | pager'
+
+function chpwd() {
+  emulate -L zsh
+  ls --color -kLNost
+}
+
+function tm() { tmux -2 -u new -s "$1" -n "$1"; }
+alias tmx='tm base'
+
+function rm () { mv -f $* ~/.trash/ }
+
+function psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto; }
+
+function search() { find . -iname "*$@*" | less; }
+
+function nix-search() { nix-env -qaP | grep -i "$1"; }
+#}}}
+
+
+#-------------------------------------------------------------------------------------[ Functions ]
+#{{{1
+
+#-- Dir String {{{2
+# from http://stackoverflow.com/questions/16147173/command-prompt-directory-styling
+dir_prompt_string() {
+  PROMPT_PATH=""
+
+  CURRENT=`dirname ${PWD}`
+  if [[ $CURRENT = / ]]; then
+    PROMPT_PATH=""
+  elif [[ $PWD = $HOME ]]; then
+    PROMPT_PATH=""
+  else
+    if [[ -d $(git rev-parse --show-toplevel 2>/dev/null) ]]; then
+      # We're in a git repo.
+      BASE=$(basename $(git rev-parse --show-toplevel))
+      if [[ $PWD = $(git rev-parse --show-toplevel) ]]; then
+        # We're in the root.
+        PROMPT_PATH=""
+      else
+        # We're not in the root. Display the git repo root.
+        GIT_ROOT="%{$fg_bold[magenta]%}${BASE}%{$reset_color%}"
+
+        PATH_TO_CURRENT="${PWD#$(git rev-parse --show-toplevel)}"
+        PATH_TO_CURRENT="${PATH_TO_CURRENT%/*}"
+
+        PROMPT_PATH="${GIT_ROOT}${PATH_TO_CURRENT}/"
+      fi
+    else
+      PROMPT_PATH=$(print -P %3~)
+      PROMPT_PATH="${PROMPT_PATH%/*}/"
+    fi
+  fi
+
+  echo "%{$fg_bold[cyan]%}${PROMPT_PATH}%{$reset_color%}%{$fg[red]%}%1~%{$reset_color%}"
+}
+#}}}
+
+#-- Git String {{{2
+#- from https://gist.github.com/joshdick/4415470
+
+GIT_PROMPT_AHEAD="%{$fg[red]%}ANUM%{$reset_color%}"
+GIT_PROMPT_BEHIND="%{$fg[cyan]%}BNUM%{$reset_color%}"
+GIT_PROMPT_MERGING="%{$fg_bold[magenta]%}±%{$reset_color%}"
+GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}†%{$reset_color%}"
+GIT_PROMPT_MODIFIED="%{$fg_bold[yellow]%}✖%{$reset_color%}"
+GIT_PROMPT_STAGED="%{$fg_bold[green]%}●%{$reset_color%}"
+
+# Show Git branch/tag, or name-rev if on detached head
+parse_git_branch() {
+  (git symbolic-ref -q HEAD || git name-rev --name-only --no-undefined --always HEAD) 2> /dev/null
+}
+
+# Show different symbols as appropriate for various Git repository states
+parse_git_state() {
+
+  # Compose this value via multiple conditional appends.
+  local GIT_STATE=""
+
+  local NUM_AHEAD="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
+  if [ "$NUM_AHEAD" -gt 0 ]; then
+    GIT_STATE=$GIT_STATE${GIT_PROMPT_AHEAD//NUM/$NUM_AHEAD}
+  fi
+
+  local NUM_BEHIND="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
+  if [ "$NUM_BEHIND" -gt 0 ]; then
+    GIT_STATE=$GIT_STATE${GIT_PROMPT_BEHIND//NUM/$NUM_BEHIND}
+  fi
+
+  local GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
+  if [ -n $GIT_DIR ] && test -r $GIT_DIR/MERGE_HEAD; then
+    GIT_STATE=$GIT_STATE$GIT_PROMPT_MERGING
+  fi
+
+  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
+    GIT_STATE=$GIT_STATE$GIT_PROMPT_UNTRACKED
+  fi
+
+  if ! git diff --quiet 2> /dev/null; then
+    GIT_STATE=$GIT_STATE$GIT_PROMPT_MODIFIED
+  fi
+
+  if ! git diff --cached --quiet 2> /dev/null; then
+    GIT_STATE=$GIT_STATE$GIT_PROMPT_STAGED
+  fi
+
+  if [[ -n $GIT_STATE ]]; then
+    echo "$GIT_STATE"
+  fi
+
+}
+
+# If inside a Git repository, print its branch and state
+git_prompt_string() {
+  local git_where="$(parse_git_branch)"
+  if [[ -n "$git_where" ]]; then
+    echo "${git_where#(refs/heads/|tags/)}:$(parse_git_state)"
+  else
+    echo "×"
+  fi
+}
+#}}}
+
+#}}}
+
+
+#----------------------------------------------------------------------------------------[ Prompt ]
+#{{{1
+
+#-- Colors {{{2
+autoload -Uz colors && colors
+autoload -Uz compinit && compinit
+export CLIICOLOR=1
+
+FGCOLOR=$'%{\e[38;2;190;95;0m%}'
+INFOCOLOR=$'%{\e[38;2;217;164;65m%}'
+
+ALERTCOLOR0="%F{107}"
+ALERTCOLOR1="%F{139}"
+ALERTCOLOR2="%F{220}"
+ALERTCOLOR3="%F{88}"
+
+RESETCOLOR="%{$reset_color%}"
+#}}}
+
+ #-- Status Line {{{2
+START="$FGCOLOR╭─"
+MACHINE="($INFOCOLOR%M$FGCOLOR)─"
+LEFT="$FGCOLOR($INFOCOLOR"
+RIGHT="$FGCOLOR)"
+JOBS="╰─($INFOCOLOR%j$FGCOLOR)"
+CMDPROMT="─╼$RESETCOLOR "
+
+PROMPT='$START$MACHINE$LEFT$(dir_prompt_string)$RIGHT─$LEFT$(git_prompt_string)$RIGHT
+$JOBS$CMDPROMT'
+RPROMPT=''
+#}}}
+
+#}}}
 
 
 
