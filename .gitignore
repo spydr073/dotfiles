@@ -2,6 +2,9 @@
 nvim/plugins
 
 xmonad/xmonad-x86_64-linux
+xmonad/xmonad.state
+xmonad/info_bars/genbar
+xmonad/info_bars/xmobar.conf
 
 *.o
 *.hi
