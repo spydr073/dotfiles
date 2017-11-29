@@ -50,6 +50,7 @@ autoload -U compinit && compinit                 # load autocompletions
 
 PATH="$HOME/bin:$PATH"                           # append to path
 export -U PATH                                   # export path var
+
 #}}}
 
 
@@ -71,6 +72,7 @@ function chpwd() {
 
 #---------------------------------------------------------------------------------------[ Aliases ]
 #{{{
+
 alias ls='ls --color -kLNost'
 alias reload='source ~/.zshrc; clear'
 alias pp='ps axuf | pager'
@@ -83,13 +85,17 @@ function chpwd() {
 function tm() { tmux -2 -u new -s "$1" -n "$1"; }
 alias tmx='tm base'
 
-function rm () { mv -f $* ~/.trash/ }
+function del () { mv -f $* ~/.trash/ }
+
+alias pbcopy='xclip -selection c'
+alias pbpaste='xclip -selection clipboard -o'
 
 function psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto; }
 
 function search() { find . -iname "*$@*" | less; }
 
 function nix-search() { nix-env -qaP | grep -i "$1"; }
+
 #}}}
 
 

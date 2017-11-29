@@ -68,6 +68,7 @@ makeTag s = (wrapColor (wrapIcon "left_inside_div.xbm")) ++
 
 -- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Hooks ]
 --{{{1
+-- Log Hook {{{2
 --myLogHook :: Handle -> PP
 myLogHook h = dynamicLogWithPP $ def
   { ppOrder           = \(ws:l:t:_) -> [ws,l]
@@ -96,13 +97,15 @@ myLogHook h = dynamicLogWithPP $ def
   , ppWsSep           = ""
   , ppOutput          = hPutStrLn h
 }
+--}}}
 
-
+-- Startup Hook {{{2
 --myStartupHook :: Handle -> X ()
-myStartupHook =  spawn "compton --config ~/dotfiles/compton/compton.conf"
-            <+>  setWMName "LG3D"
+myStartupHook =  --spawn "compton --config ~/dotfiles/compton/compton.conf" <+>
+                 setWMName "LG3D"
+--}}}
 
-
+-- Mangage Hook {{{2
 -- use xprop to get window information
 myManageHook :: ManageHook
 myManageHook =
@@ -135,8 +138,9 @@ myManageHook =
     doSideFloat' p = doSideFloat p
     doRectFloat' r = doRectFloat r
     doFullFloat' = doFullFloat
+--}}}
 
-
+-- Layout Hook {{{2
 myLayoutHook = onWorkspaces ["5"] gimpLayoutFirst $
                onWorkspaces ["1", "8"] floatLayoutFirst $
                defaultLayoutOrder
@@ -169,7 +173,7 @@ myLayoutHook = onWorkspaces ["5"] gimpLayoutFirst $
                                         (Role "gimp-dock")
                                         (Mirror (Tall 1 (3/100) (1/2))
                                             ||| Full)))
-
+--}}}
 --}}}
 
 

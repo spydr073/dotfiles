@@ -11,46 +11,47 @@
 "──────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Settings ]
-"{{{1
+"--------------------------------------------------------------------------------------[ Settings ]
+"{1
+
 set nocompatible
+set termguicolors
+let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+
 scriptencoding utf-8
 set termencoding=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
 set fileformat=unix
 
-syntax on
-filetype on
-filetype plugin on
-filetype indent on
-colorscheme greenMist
-
-let $NVIM='/home/spydr/.config/nvim/'
-let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
-
 set mouse-=a
-"}}}
 
+"}
 
-"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Plugins ]
-"{{{1
+"---------------------------------------------------------------------------------------[ Plugins ]
+"{1
+
 "-- Run ':call dein#install()' to install plugins.
-set runtimepath+=~/.config/nvim/plugins/repos/github.com/Shougo/dein.vim
-if dein#load_state(expand('~/.config/nvim/plugins/'))
-  call dein#begin(expand('~/.config/nvim/plugins/'))
+set runtimepath+=~/dotfiles/nvim/plugins/repos/github.com/Shougo/dein.vim
+if dein#load_state(expand('~/dotfiles/nvim/plugins/'))
+  call dein#begin(expand('~/dotfiles/nvim/plugins/'))
     call dein#add('Shougo/dein.vim')
     call dein#add('scrooloose/nerdtree')
     call dein#add('idris-hackers/idris-vim.git')
   call dein#end()
   call dein#save_state()
 endif
-"}}}
 
+if dein#check_install()
+  call dein#install()
+endif
 
-"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Behavior ]
-"{{{1
+"}
+
+"--------------------------------------------------------------------------------------[ Behavior ]
+"{1
+
 set ttyfast
 set autoread
 set ruler
@@ -102,11 +103,12 @@ set foldenable
 set foldmethod=marker
 set foldtext=FoldText()
 set foldlevelstart=0
-"}}}
 
+"}
 
-"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Functions ]
-"{{{1
+"-------------------------------------------------------------------------------------[ Functions ]
+"{1
+
 function! NumberToggle()
   if(&number == 1)
     set number!
@@ -119,16 +121,15 @@ endfunc
 
 function! HeaderComment(commentChar)
   let line = getline('.')
-  let fillStr = repeat("┈", 100-(strlen(line) + strlen(a:commentChar) + 5))
+  let fillStr = repeat("-", 100-(strlen(line) + strlen(a:commentChar) + 5))
   call setline('.', a:commentChar . fillStr . "[ " . line . " ]")
 endfunc
 
 function! FoldText()
-  let line = substitute(getline(v:foldstart),
-        \ '^\s*"\?\s*\|\s*"\?\s*{{' . '{\d*\s*', '', 'g') . ' '
+  let line = substitute(getline(v:foldstart), '^\(.*\){\d*\s*', '', 'g') . ' '
   let lines_count = v:foldend - v:foldstart + 1
-  let lines_count_text = '[' . printf("%s", lines_count . ' lines') . ']'
-  let foldchar = '┈'
+  let lines_count_text = '[ ' . printf("%s", lines_count . ' lines') . ' ]'
+  let foldchar = '-'
   let foldtextstart = strpart('↳ ' . line, 0, (winwidth(0)*2)/3)
   let foldtextend = lines_count_text . '·'
   let foldtextlength = strlen(substitute(foldtextstart . foldtextend,
@@ -136,13 +137,18 @@ function! FoldText()
   return foldtextstart . repeat(foldchar, 100-foldtextlength) .
         \ foldtextend . repeat(' ', winwidth(0) - 100)
 endfunction
-"}}}
 
-"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Appearance ]
-"{{{1
-set termguicolors
+"}
+
+"------------------------------------------------------------------------------------[ Appearance ]
+"{1
+
+filetype plugin indent on
+syntax enable
+colorscheme greenMist
 
 set title
+set showtabline=1
 set showcmd
 set display=lastline
 
@@ -152,75 +158,53 @@ set colorcolumn=100
 
 set list listchars=tab:»\ ,eol:·,nbsp:␣,precedes:↩,extends:↪
 
-set showtabline=0
+"}
 
-"}}}
+"--------------------------------------------------------------------------------------[ Bindings ]
+"{1
 
-
-"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Bindings ]
-"{{{1
 let mapleader = ","
+let maplocalleader = ",,"
 
-" Normal Mode {{{2
-nnoremap <S-r> :so ~/.config/nvim/init.vim<CR>|      " reload config file
+"{2 Normal Mode
 
-nnoremap ; :|                                        " make cmd mode easier to access
-nnoremap : ;|                                        " fix remapped ';' char
+nnoremap <S-r> :so ~/dotfiles/nvim/init.vim<CR>|     " reload config file
+
+nnoremap <Bslash> :|                                 " remap cmd mode
 
 nnoremap <Leader>b :ls<CR>:b<Space>|                 " better buffer switching
 nnoremap <Leader>f :NERDTreeToggle<CR>|              " toggle nerdtree
 nnoremap <Leader><Space> za|                         " toggle folds
 nnoremap <Leader>n :call NumberToggle()<CR>|         " toggle relative line numbers
 
+nnoremap <Leader>e :e |                              " open file
+nnoremap <Leader>w :w<CR>|                           " write file
+
 nnoremap <C-r> :redo<CR>|                            " reverse undo operation
 nnoremap <C-u> :undo<CR>|                            " undo an operation
 
 nnoremap <C-w> :redraw!<CR>|                         " redraw buffer
 
-nnoremap / /v|                                       " better search
-
-nnoremap <C-j> o<Esc>|                               " insert blank line above
-nnoremap <C-k> O<Esc>|                               " insert blank line below
 nnoremap j gj|                                       " make j work on wrapped lines
 nnoremap k gk|                                       " make k work on wrapped lines
 
-noremap <Space> <C-d>|                               " jump half page down
-noremap <CR> <C-u>|                                  " jump half page up
+noremap <Space> gj|                                  " jump line down
+noremap <CR> gk|                                     " jump line up
+
 nnoremap <Tab> %|                                    " jump to matching pairs
-"}}}
 
+"}
 
-" Visual Mode {{{2
-vnoremap / /v|                                       " better search
+"{2 Visual Mode
+
 vnoremap <Tab> %|                                    " jump to matching parens
 vnoremap < <gv|                                      " indent out one layer
 vnoremap > >gv|                                      " indent in one layer
-"}}}
 
+"}
 
-" Insert Mode {{{2
-inoremap jj <esc>|                                   " escape from insert mode
-inoremap jk <esc>|                                   " escape from insert mode
-inoremap kj <esc>|                                   " escape from insert mode
-"}}}
+"{2 Insert Mode
 
-
-" Command Mode {{{2
-cnoremap w!! w !sudo tee % >/dev/null|               " write to read only files
-
-cnoremap <C-a>  <Home>|                              " move cursor to begining
-cnoremap <C-b>  <Left>|                              " move cursor to left
-cnoremap <C-f>  <Right>|                             " move cursor to right
-cnoremap <C-d>  <Delete>|                            " delete at cursor
-cnoremap <M-b>  <S-Left>|                            " move left one word
-cnoremap <M-f>  <S-Right>|                           " move right one word
-
-cnoremap <M-d>  <S-right><Delete>|                   " cut current word after cursor
-cnoremap <C-g>  <C-c>|                               " abort search
-"}}}
-
-
-" Unicode Chars {{{2
 inoremap <M-a> α|  "-- alpha
 inoremap <M-b> β|  "-- beta
 inoremap <M-c> χ|  "-- chi
@@ -275,7 +259,6 @@ inoremap <M-S-x> Ξ|  "-- xi
 inoremap <M-S-y> Υ|  "-- upsilon
 inoremap <M-S-z> Ζ|  "-- zeta
 
-
 inoremap <M-1> ⊤
 inoremap <M-0> ⊥
 inoremap <M-S-0> ∅
@@ -289,16 +272,31 @@ inoremap <M-.> ◦
 inoremap <M-+> ⧺
 inoremap <M-!> ¬
 
-"}}}
+"}
 
-"}}}
+"{2 Command Mode
 
+cnoremap w!! w !sudo tee % >/dev/null|               " write to read only files
 
-"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Autocmd ]
-"{{{1
+cnoremap <C-a>  <Home>|                              " move cursor to begining
+cnoremap <C-b>  <Left>|                              " move cursor to left
+cnoremap <C-f>  <Right>|                             " move cursor to right
+cnoremap <C-d>  <Delete>|                            " delete at cursor
+cnoremap <M-b>  <S-Left>|                            " move left one word
+cnoremap <M-f>  <S-Right>|                           " move right one word
+
+cnoremap <M-d>  <S-right><Delete>|                   " cut current word after cursor
+cnoremap <C-g>  <C-c>|                               " abort search
+
+"}
+
+"}
+
+"---------------------------------------------------------------------------------------[ Autocmd ]
+"{1
 if has("autocmd")
 
-  " General {{{2
+  "{2 General
   augroup vimrc
     autocmd!
     autocmd BufWritePost $MYVIMRC source % | echomsg "Reloaded " . $MYVIMRC | redraw
@@ -317,9 +315,10 @@ if has("autocmd")
     autocmd BufEnter *.* execute ":lcd " . expand("%:p:h")
 
   augroup END
-  "}}}
+  "}
 
-  " Config Mode {{{2
+  "{2 Config
+
   augroup Config
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.conf,*.nix call SetConfigOpts()
@@ -337,11 +336,16 @@ if has("autocmd")
     setlocal nolist
     setlocal wrapmargin=0
     setlocal textwidth=99
-    nnoremap <buffer> <Leader>h HeaderComment("#")<CR>
-  endfunction
-  "}}}
 
-  " Vim Mode {{{2
+    setlocal foldmarker=#{,#}
+    nnoremap <buffer> <Leader>h HeaderComment("#")<CR>
+
+  endfunction
+
+  "}
+
+  "{2 Vim
+
   augroup Config
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.vim call SetVimOpts()
@@ -355,11 +359,14 @@ if has("autocmd")
     setlocal shiftwidth=2
     setlocal tabstop=2
 
+    setlocal foldmarker=\"{,\"}
     nnoremap <buffer> <Leader>h :call HeaderComment("\"")<CR>
-  endfunction
-  "}}}
 
-  " Shell Mode {{{2
+  endfunction
+
+  "}
+
+  "{2 Shell
   augroup Shell
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.zsh,*.sh,*.bash call SetShellOpts()
@@ -373,11 +380,13 @@ if has("autocmd")
     setlocal shiftwidth=2
     setlocal tabstop=2
 
+    setlocal foldmarker=#{,#}
     nnoremap <buffer> <Leader>h :call HeaderComment("#")<CR>
-  endfunction
-  "}}}
 
-  " Lisp Mode {{{2
+  endfunction
+  "}
+
+  "{2 Lisp
   augroup Lisp
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.lisp,*.scm,*.rkt call SetLispOpts()
@@ -390,11 +399,14 @@ if has("autocmd")
     setlocal copyindent
     setlocal shiftwidth=2
     setlocal tabstop=2
-    nnoremap <buffer> <Leader>h HeaderComment(";;")<CR>
-  endfunction
-  "}}}
 
-  " Haskell Mode {{{2
+    setlocal foldmarker=;;{,;;}
+    nnoremap <buffer> <Leader>h HeaderComment(";;")<CR>
+
+  endfunction
+  "}
+
+  "{2 Haskell
   augroup Haskell
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.hs call SetHaskellOpts()
@@ -408,12 +420,13 @@ if has("autocmd")
     setlocal shiftwidth=2
     setlocal tabstop=2
 
+    setlocal foldmarker=--{,--}
     nnoremap <buffer> <Leader>h :call HeaderComment("--")<CR>
 
   endfunction
-  "}}}
+  "}
 
-  " Idris Mode {{{2
+  "{2 Idris
   augroup Idris
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.idr call SetIdrisOpts()
@@ -436,12 +449,36 @@ if has("autocmd")
     let g:idris_indent_do = 2
     let g:idris_indent_rewrite = 2
 
+    setlocal foldmarker=--{,--}
     nnoremap <buffer> <Leader>h :call HeaderComment("--")<CR>
 
   endfunction
-  "}}}
+  "}
 
-  " Python Mode {{{2
+  "{2 Java
+  augroup Java
+    autocmd!
+    autocmd bufread,bufnewfile,bufenter *.java call SetJavaOpts()
+  augroup END
+
+  function! SetJavaOpts()
+    setlocal expandtab
+    setlocal autoindent
+    setlocal smartindent
+    setlocal copyindent
+    setlocal shiftwidth=4
+    setlocal tabstop=4
+    setlocal textwidth=100
+    setlocal backspace=indent,eol,start
+    setlocal fo=croql
+
+    setlocal foldmarker=//{,//}
+    nnoremap <buffer> <Leader>h :call HeaderComment("//")<CR>
+
+  endfunction
+  "}
+
+  "{2 Python
   augroup Python
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.py call SetPythonOpts()
@@ -458,12 +495,13 @@ if has("autocmd")
     setlocal backspace=indent,eol,start
     setlocal fo=croql
 
+    setlocal foldmarker=#{,#}
     nnoremap <buffer> <Leader>h :call HeaderComment("#")<CR>
 
   endfunction
-  "}}}
+  "}
 
-  " R Mode {{{2
+  "{2 R
   augroup R
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.r call SetROpts()
@@ -480,12 +518,31 @@ if has("autocmd")
     setlocal backspace=indent,eol,start
     setlocal fo=croql
 
+    setlocal foldmarker=//{,//}
     nnoremap <buffer> <Leader>h :call HeaderComment("//")<CR>
 
   endfunction
-  "}}}
+  "}
 
-  " Text Mode {{{2
+  "{2 CSS
+  augroup Css
+    autocmd!
+    autocmd bufread,bufnewfile,bufenter *.css call SetCssOpts()
+  augroup END
+
+  function! SetCssOpts()
+    setlocal expandtab
+    setlocal autoindent
+    setlocal smartindent
+    setlocal copyindent
+    setlocal shiftwidth=2
+    setlocal tabstop=2
+    setlocal nowrap
+    setlocal backspace=indent,eol,start
+  endfunction
+  "}
+
+  "{2 Text
   augroup Text
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.txt call SetTextOpts()
@@ -508,7 +565,7 @@ if has("autocmd")
   endfunction
   "}}}
 
-  " CSV Mode {{{2
+  "{2 CSV
   augroup CSV
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.csv,*.tsv call SetCsvOpts()
@@ -522,33 +579,44 @@ if has("autocmd")
     setlocal scrollopt=hor
     setlocal scrollbind
   endfunction
-  "}}}
+  "}
 
-  " LaTex Mode {{{2
+  "{2 Tex
   augroup LaTex
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.tex call SetLatexOpts()
   augroup END
 
   function! SetLatexOpts()
+    let g:tex_flavor = "latex"
+
+    let g:tex_indent_brace = 0
+    let g:tex_indent_items = 1
+    let g:tex_items        = 1
+    let g:tex_itemize_env  = 1
+    let g:tex_noindent_env = 1
+    let g:tex_indent_and   = 1
+
     setlocal spell
     setlocal spelllang=en_us
 
-    setlocal formatoptions=ant
-    setlocal textwidth=80
-    setlocal wrapmargin=0
+    setlocal expandtab
+    setlocal shiftwidth=2
+    setlocal tabstop=2
+    setlocal textwidth=99
 
     setlocal noautoindent
     setlocal nocindent
     setlocal nosmartindent
-    setlocal indentexpr=
 
+    setlocal foldmarker=%{,%}
     nnoremap <buffer> <Leader>h :call HeaderComment("%")<CR>
+    nnoremap <leader>m ;w<CR>;silent !latexmk -quiet -pv "%"; latexmk -c "%"<CR><CR>;redraw!<CR>
 
   endfunction
-  "}}}
+  "}
 
-" Bib Mode {{{2
+  "{2 Bib
   augroup Bib
     autocmd!
     autocmd bufread,bufnewfile,bufenter *.bib call SetBibOpts()
@@ -565,40 +633,19 @@ if has("autocmd")
     setlocal fo -=l
     setlocal fo +=t
 
+    setlocal foldmarker=%{,%}
     nnoremap <buffer> <Leader>h :call HeaderComment("%")<CR>
 
   endfunction
-  "}}}
-
-  " Java Mode {{{2
-  augroup Java
-    autocmd!
-    autocmd bufread,bufnewfile,bufenter *.java call SetJavaOpts()
-  augroup END
-
-  function! SetJavaOpts()
-    setlocal expandtab
-    setlocal autoindent
-    setlocal smartindent
-    setlocal copyindent
-    setlocal shiftwidth=4
-    setlocal tabstop=4
-    setlocal textwidth=100
-    setlocal backspace=indent,eol,start
-    setlocal fo=croql
-
-    nnoremap <buffer> <Leader>h :call HeaderComment("//")<CR>
-
-  endfunction
-  "}}}
+  "}
 
 endif
 
-"}}}
+"}
 
+"-----------------------------------------------------------------------------------[ Status Line ]
+"{1
 
-"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Status Line ]
-"{{{1
 let g:currentmode={
     \ 'n'  : 'N',
     \ 'no' : 'N·Operator Pending',
@@ -621,6 +668,7 @@ let g:currentmode={
     \ 't'  : 'Terminal'
     \}
 
+
 " Automatically change the statusline color depending on mode
 function! ChangeStatuslineColor(mode)
   let m = g:currentmode[a:mode]
@@ -634,6 +682,19 @@ function! ChangeStatuslineColor(mode)
     hi StatusLine term=reverse guifg=#b19cd9 guibg=#111111 gui=none
   endif
   return ''
+endfunction
+
+function! ChangeStatuslineColor()
+  redraw
+  if (mode() =~# '\v(n|no)')
+  	exe 'hi! StatusLine term=reverse guifg=#111111 guibg=#787878 gui=none'
+  elseif (mode() =~# '\v(v|V)' || g:currentmode[mode()] ==# 'V·Block')
+  	exe 'hi! StatusLine term=reverse guifg=#77dd88 guibg=#3c1111 gui=none'
+  elseif (mode() ==# 'i')
+  	exe 'hi! StatusLine term=reverse guifg=#888888 guibg=#3c1111 gui=none'
+  else
+  	exe 'hi! StatusLine term=reverse guifg=#111111 guibg=#787878 gui=none'
+  endif
 endfunction
 
 " Find out current buffer's size and output it.
@@ -661,17 +722,39 @@ endfunction
 
 function! ReadOnly()
   if &readonly || !&modifiable
-    return '\ '
+    return ' '
   else
     return ''
 endfunction
 
 function! Modified()
   if &modified
-    return '\ ✖'
+    return ' ✖'
   else
     return ''
 endfunction
+
+function! EFName()
+  let l:fname = expand('%:t:r')
+  if !(&modified || &readonly || !&modifiable)
+    return ''
+  elseif &modified
+    let l:fname = l:fname.' ✖'
+  elseif &readonly || !&modifiable
+    let l:fname = l:fname .' '
+  endif
+  return l:fname
+endfunction
+
+function! FName()
+  let l:fname = expand('%:t:r')
+  if &modified || &readonly || !&modifiable
+    return ''
+   else
+    return l:fname
+  endif
+endfunction
+
 
 function! GitBranch()
   let gitInfo = system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
@@ -691,13 +774,13 @@ autocmd! InsertLeave * hi StatusLine term=reverse guifg=#111111 guibg=#787878 gu
 set laststatus=2
 set statusline=
 "set statusline+=%{ChangeStatuslineColor(mode())}
+"set statusline+=%{ChangeStatuslineColor()}
 set statusline+=\ ❲%{toupper(g:currentmode[mode()])}❳\ |    "current mode
 set statusline+=❲%n❳\ \ |                                   "buffernumber
 set statusline+=%1*|                                        "switch to User1 hi group
 set statusline+=\ %{StatuslineGit()}|                       "version control
-set statusline+=%3*%{Modified()}%1*
 set statusline+=\ %2*❱%1*\ |
-set statusline+=%t%{ReadOnly()}|                            "tail of the filename
+set statusline+=%{FName()}%3*%{EFName()}%1*|                "file name with flags
 set statusline+=\ %2*❱%1*\ |
 set statusline+=❲%{strlen(&fenc)?&fenc:'none'}:|            "file encoding
 set statusline+=%{&ff}❳|                                    "file format
@@ -715,6 +798,7 @@ set statusline+=%{FileSize()}❳|                             "file size
 set statusline+=\ %2*❮%1*\ |
 set statusline+=❲%P❳\ |                                     "percent through file
 
-"}}}
+"}
+
 
 

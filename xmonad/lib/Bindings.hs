@@ -164,16 +164,15 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- Restart xmonad and xmobar
   , ((modMask .|. shiftMask, xK_r),
      spawn ("pkill xmobar " ++
-            "&& runghc -i/home/spydr/.xmonad/lib /home/spydr/.xmonad/info_bars/genbar.hs " ++
+            --"&& runghc -i/home/spydr/.xmonad/lib /home/spydr/.xmonad/info_bars/genbar.hs " ++
+            "&& /home/spydr/.xmonad/info_bars/genbar" ++
             ">  /home/spydr/.xmonad/info_bars/xmobar.conf " ++
             "&& xmonad --recompile " ++
             "&& xmonad --restart"))
 
   --}}}
   ]
-
   ++
-
   -- Workspace navigation {{{2
   -- mod-[1..9], Switch to workspace N
   -- mod-shift-[1..9], Move client to workspace N
@@ -182,17 +181,14 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
   ]
   -- }}}
-
-  -- ++
-
+  ++
   -- Screen navigation {{{2
-
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-  --[ ((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-  --  | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-  --  , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
-  --]
+  [ ((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+    | (key, sc) <- zip [xK_q, xK_w, xK_e] [0..]
+    , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
+  ]
 
   --[ ((modMask .|. mask, key), f sc)
   --   | (key, sc) <- zip [xK_q, xK_w, xK_e] [0..]
