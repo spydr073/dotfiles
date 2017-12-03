@@ -1,58 +1,41 @@
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Module ]
---{{{1
+-----------------------------------------------------------------------------------------[ Module ]
+--{1
+
 module Hooks
   ( myStartupHook
   , myLogHook
   , myManageHook
   , myLayoutHook
   ) where
---}}}
 
-
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Imports ]
---{{{1
 import System.IO
+
 import XMonad
 
-import XMonad.ManageHook
-import XMonad.Util.SpawnOnce
-import XMonad.Actions.CopyWindow
-
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.DynamicHooks
-import XMonad.Hooks.UrgencyHook
-import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.FadeInactive
-import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
-import XMonad.Hooks.Minimize
 
 import XMonad.Layout
-import XMonad.Layout.LayoutModifier
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.SimplestFloat
-import XMonad.Layout.SimpleFloat
 import XMonad.Layout.NoBorders
-import XMonad.Layout.Renamed
 import XMonad.Layout.Reflect
 import XMonad.Layout.Spacing
 import XMonad.Layout.Tabbed
-import XMonad.Layout.Grid
 import XMonad.Layout.IM
 import XMonad.Layout.Named
-
-import qualified XMonad.StackSet as W
 
 import Settings
 import Themes
 import MyXMobarConfig
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Statusbar Functions ]
---{{{1
+------------------------------------------------------------------------------------------[ Utils ]
+--{1
+
 wrapIcon :: String -> String
 wrapIcon icon = "<icon=" ++ myIconDir ++ icon ++ "/>"
 
@@ -63,16 +46,18 @@ makeTag s = (wrapColor (wrapIcon "left_inside_div.xbm")) ++
   where wrapColor i = "<fc=" ++ myfgTagColor ++ "," ++ mybgTagColor ++ ">"
                       ++ i ++ "</fc>"
         pad s = "  " ++ s ++ "  "
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Hooks ]
---{{{1
--- Log Hook {{{2
+------------------------------------------------------------------------------------------[ Hooks ]
+--{1
+
+--{2 Log
+
 --myLogHook :: Handle -> PP
 myLogHook h = dynamicLogWithPP $ def
   { ppOrder           = \(ws:l:t:_) -> [ws,l]
-  , ppUrgent          = xmobarColor mybgColor mybgColor_urgent
+  --, ppUrgent          = xmobarColor mybgColor mybgColor_urgent
 
   , ppCurrent         = xmobarColor myfgColor_current mybgColor_bar .
                           (\ _ -> wrapIcon "dot_full_16.xbm")
@@ -82,6 +67,7 @@ myLogHook h = dynamicLogWithPP $ def
                           (\ _ -> wrapIcon "dot_full_16.xbm")
   , ppHiddenNoWindows = xmobarColor myfgColor_noWindows mybgColor_bar .
                           (\ _ -> wrapIcon "dot_empty_16.xbm")
+
 
   , ppLayout          = xmobarColor myfgColor mybgColor_bar .
                           (\s ->
@@ -96,16 +82,19 @@ myLogHook h = dynamicLogWithPP $ def
   , ppSep             = ""
   , ppWsSep           = ""
   , ppOutput          = hPutStrLn h
-}
---}}}
+  }
 
--- Startup Hook {{{2
+--}
+
+--{2 Startup
+
 --myStartupHook :: Handle -> X ()
-myStartupHook =  --spawn "compton --config ~/dotfiles/compton/compton.conf" <+>
-                 setWMName "LG3D"
---}}}
+myStartupHook =  setWMName "LG3D"
 
--- Mangage Hook {{{2
+--}
+
+--{2 Mangagement
+
 -- use xprop to get window information
 myManageHook :: ManageHook
 myManageHook =
@@ -138,9 +127,11 @@ myManageHook =
     doSideFloat' p = doSideFloat p
     doRectFloat' r = doRectFloat r
     doFullFloat' = doFullFloat
---}}}
 
--- Layout Hook {{{2
+--}
+
+--{2 Layout
+
 myLayoutHook = onWorkspaces ["5"] gimpLayoutFirst $
                onWorkspaces ["1", "8"] floatLayoutFirst $
                defaultLayoutOrder
@@ -173,8 +164,10 @@ myLayoutHook = onWorkspaces ["5"] gimpLayoutFirst $
                                         (Role "gimp-dock")
                                         (Mirror (Tall 1 (3/100) (1/2))
                                             ||| Full)))
---}}}
---}}}
+
+--}
+
+--}
 
 
 

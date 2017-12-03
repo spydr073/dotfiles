@@ -1,38 +1,29 @@
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Module ]
---{{{1
+-----------------------------------------------------------------------------------------[ Module ]
+--{1
+
 module Bindings
   ( myKeyBindings
   , myMouseBindings
   ) where
---}}}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Imports ]
---{{{1
 import XMonad
-
-import System.Exit
-
---import XMonad.Actions.PhysicalScreens
-
 import XMonad.Hooks.ManageDocks
-
-import XMonad.Util.EZConfig
-
 import qualified XMonad.StackSet as W
 
-import qualified Data.Map        as M
-import qualified Data.Set        as S
+import System.Exit
+import qualified Data.Map as M
 
 import Settings
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Keyboard Bindings ]
---{{{1
+---------------------------------------------------------------------------------------[ Keyboard ]
+--{1
+
 myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   [
-    -- Program Bindings {{{2
+    --{2 Programs
 
     -- Spawn default terminal.
     ((modMask, xK_Return),
@@ -89,8 +80,9 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0, 0x1008ff03),
      spawn "/home/spydr/.xmonad/scripts/decrease-backlight.sh")
 
-  --}}}
-  -- Window management bindings {{{2
+  --}
+
+  --{2 Window management
 
     -- Close focused window.
   , ((modMask .|. shiftMask, xK_c),
@@ -164,43 +156,38 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- Restart xmonad and xmobar
   , ((modMask .|. shiftMask, xK_r),
      spawn ("pkill xmobar " ++
-            --"&& runghc -i/home/spydr/.xmonad/lib /home/spydr/.xmonad/info_bars/genbar.hs " ++
+            --"&& runghc -i/home/spydr/.xmonad/lib /home/spydr/dotfiles/xmonad/info_bars/genbar.hs " ++
             "&& /home/spydr/.xmonad/info_bars/genbar" ++
             ">  /home/spydr/.xmonad/info_bars/xmobar.conf " ++
             "&& xmonad --recompile " ++
             "&& xmonad --restart"))
 
-  --}}}
+  --}
   ]
   ++
-  -- Workspace navigation {{{2
+  --{2 Workspaces
   -- mod-[1..9], Switch to workspace N
   -- mod-shift-[1..9], Move client to workspace N
   [((m .|. modMask, k), windows $ f i)
     | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_8]
     , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
   ]
-  -- }}}
-  ++
-  -- Screen navigation {{{2
-  -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-  -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
+  --}
+   ++
+  --{2 Screens
+  -- mod-{q,w,e}, Switch to physical/Xinerama screens 1, 2, or 3
+  -- mod-shift-{q,w,e}, Move client to screen 1, 2, or 3
   [ ((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
     | (key, sc) <- zip [xK_q, xK_w, xK_e] [0..]
     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
   ]
+  --}
 
-  --[ ((modMask .|. mask, key), f sc)
-  --   | (key, sc) <- zip [xK_q, xK_w, xK_e] [0..]
-  --   , (f, mask) <- [(viewScreen, 0), (sendToScreen, shiftMask)]
-  --]
+--}
 
-  --}}}
---}}}
+------------------------------------------------------------------------------------------[ Mouse ]
+--{1
 
-
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Mouse Bindings ]
---{{{1
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   [ -- Set the window to floating mode and move by dragging
     ((modMask, button1),
@@ -218,6 +205,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0, 7),
      (\w -> focus w >> mouseResizeWindow w))
   ]
---}}}
+
+--}
 
 

@@ -1,6 +1,7 @@
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Module ]
---{{{1
+-----------------------------------------------------------------------------------------[ Module ]
+--{1
+
 module Themes
   ( myTheme
   , myBorderWidth
@@ -26,33 +27,26 @@ module Themes
   , myfgMedColor_bar
   , myfgHighColor_bar
   ) where
---}}}
 
-
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Imports ]
---{{{1
 import XMonad
---import XMonad.Prompt
 import XMonad.Layout.Decoration
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.DynamicHooks
-import XMonad.Util.Loggers
-import XMonad.Util.WorkspaceCompare
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Settings ]
---{{{1
+---------------------------------------------------------------------------------------[ Settings ]
+--{1
+
 myBorderWidth :: Dimension
 myBorderWidth = 4
 
 myFont :: String
 myFont = "terminus"
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Colors ]
---{{{1
+-----------------------------------------------------------------------------------------[ Colors ]
+--{1
+
 -- XMonad Colors
 myNormalBorderColor  = "#404450"
 myFocusedBorderColor = "#504440"
@@ -99,11 +93,12 @@ colorMag1 = "#7F355E" --Magenta
 colorMag2 = "#95618B"
 colorCyn1 = "#34676F" --Cyan
 colorCyn2 = "#5D858A"
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Themes ]
---{{{1
+-----------------------------------------------------------------------------------------[ Themes ]
+--{1
+
 myTheme :: Theme
 myTheme = def
   { fontName            = myFont
@@ -117,7 +112,8 @@ myTheme = def
   , urgentTextColor     = colorRed2
   , decoHeight          = 18
   }
---}}}
+
+--}
 
 
 

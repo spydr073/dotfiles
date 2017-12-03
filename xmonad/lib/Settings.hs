@@ -1,6 +1,7 @@
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Module ]
---{{{1
+-----------------------------------------------------------------------------------------[ Module ]
+--{1
+
 module Settings
   ( myHomeDir
   , myScripts
@@ -18,29 +19,26 @@ module Settings
   , myLauncher
   , myStatusBar
   ) where
---}}}
 
-
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Imports ]
---{{{1
 import XMonad
-import XMonad.Prompt
 
 import Foreign.C.Types
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Paths ]
---{{{1
+------------------------------------------------------------------------------------------[ Paths ]
+--{1
+
 username  = "spydr"
 myHomeDir = "/home/" ++ username ++ "/"
-myScripts = myHomeDir ++ ".xmonad/scripts/"
-myIconDir = myHomeDir ++ ".xmonad/info_bars/xbm/"
---}}}
+myScripts = myHomeDir ++ "dotfiles/xmonad/scripts/"
+myIconDir = myHomeDir ++ "dotfiles/xmonad/info_bars/xbm/"
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ XMonad Vars ]
---{{{1
+------------------------------------------------------------------------------------[ XMonad Vars ]
+--{1
+
 myModMask :: Foreign.C.Types.CUInt
 myModMask = mod4Mask
 
@@ -52,11 +50,12 @@ myClickJustFocuses  = True
 
 myWorkspaces :: [WorkspaceId]
 myWorkspaces = map show [1..8 :: Int]
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Default Programs ]
---{{{1
+-------------------------------------------------------------------------------[ Default Programs ]
+--{1
+
 myTerminal :: String
 myTerminal = "/run/current-system/sw/bin/termite"
 
@@ -75,8 +74,9 @@ myLauncher = "$(dmenu_run -nf '#b19cd9' -nb '#222222' -sf '#add8e6' -sb '#444444
 
 myStatusBar :: String
 myStatusBar = "/run/current-system/sw/bin/xmobar " ++
-              myHomeDir ++ ".xmonad/info_bars/xmobar.conf"
---}}}
+              myHomeDir ++ "dotfiles/xmonad/info_bars/xmobar.conf"
+
+--}
 
 
 
