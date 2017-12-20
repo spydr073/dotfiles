@@ -11,9 +11,9 @@
 -- ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
+-----------------------------------------------------------------------------------------[ Module ]
+--{1
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Module ]
---{{{1
 module MyXMobarConfig
   ( myConfig
 
@@ -31,18 +31,16 @@ module MyXMobarConfig
   , tag_right
   , tag_right_end
   ) where
---}}}
 
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Imports ]
---{{{1
 import XMobarUtils
 import Themes
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Settings ]
---{{{1
+---------------------------------------------------------------------------------------[ Settings ]
+--{1
+
 shell       = "/run/current-system/sw/bin/zsh"
 
 left_div    = icon "left_inside_div"
@@ -55,11 +53,12 @@ gradient    = [ "--low"    , myfgLowColor_bar  ++ "," ++ mybgColor_bar
               , "--normal" , myfgMedColor_bar  ++ "," ++ mybgColor_bar
               , "--high"   , myfgHighColor_bar ++ "," ++ mybgColor_bar
               ]
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Tag Formatting ]
---{{{1
+-------------------------------------------------------------------------------------[ Formatting ]
+--{1
+
 tag_left_start =
   \c -> (color myfgTagColor mybgTagColor left_cap) ++
         (color myfgColor_bar mybgColor_bar c)
@@ -94,11 +93,12 @@ tag_right_end =
         (color myfgColor_bar mybgColor_bar c) ++
         (color myfgTagColor mybgTagColor right_cap) ++
         (color mybgTagColor mybgTagColor "  ")
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ XMobar Config ]
---{{{1
+-----------------------------------------------------------------------------------------[ Config ]
+--{1
+
 myConfig = XMobar {
   font             = "xft:Anonymous Pro:size=10:bold:antialias=true"
     --font             = "xft:Terminus:size=10:bold:antialias=true"
@@ -106,7 +106,7 @@ myConfig = XMobar {
   , additionalFonts  = []
   , iconOffset       = -1
   , textOffset       = -1
-  , iconRoot         = "/home/spydr/.xmonad/info_bars/xbm/"
+  , iconRoot         = "/home/spydr/dotfiles/xmonad/info_bars/xbm/"
   , pickBroadest     = True
 
   , fgColor          = myfgColor_bar
@@ -148,7 +148,7 @@ myConfig = XMobar {
       , DateCmd (tag_center " %a %F %H:%M %z ") 10
 
       , UsrCmd  shell
-                [ "-c" , "/home/spydr/.xmonad/scripts/volume.sh get" ]
+                [ "-c" , "/home/spydr/dotfiles/xmonad/scripts/volume.sh get" ]
                 "volume"
                 3
 
@@ -199,7 +199,8 @@ myConfig = XMobar {
 
       ]
   }
---}}}
+
+--}
 
 
 

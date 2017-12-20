@@ -1,19 +1,17 @@
 {-# LANGUAGE GADTs, FlexibleInstances #-}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Module ]
---{{{1
+-----------------------------------------------------------------------------------------[ Module ]
+--{1
+
 module XMobarUtils where
---}}}
 
-
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Imports ]
---{{{
 import Text.Printf
---}}}
 
+--}
 
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ Formatting Functions ]
---{{{1
+-------------------------------------------------------------------------------------[ Formatting ]
+--{1
+
 quote :: String -> String
 quote x = "\"" ++ x ++ "\""
 
@@ -22,11 +20,11 @@ color fg bg x = "<fc=" ++ fg ++ "," ++ bg ++ ">" ++ x ++ "</fc>"
 
 icon :: String -> String
 icon i = "<icon=" ++ i ++".xbm/>"
---}}}
+--
+--}
 
-
--- ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈[ XMobar Types ]
---{{{1
+-----------------------------------------------------------------------------------------[ Xmobar ]
+--{1
 
 data Command where
   XBarCmd :: String -> [String] -> Int -> Command
@@ -41,8 +39,6 @@ instance Show Command where
                              quote n ++ " " ++ show i ++ "\n"
   show (XBarCmd n args i)  = " Run " ++ n ++ " " ++ show args ++ " " ++ show i ++ "\n"
 
-
-
 class ToString a where
     toString :: a -> String
 
@@ -51,7 +47,6 @@ instance ToString Char where
 
 instance ToString (Char,Char) where
   toString p = (fst p) : (snd p) : []
-
 
 
 data XMobar = XMobar { font             :: String
@@ -108,7 +103,7 @@ instance ToString XMobar where
 instance Show XMobar where
   show = toString
 
---}}}
+--}
 
 
 

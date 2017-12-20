@@ -47,16 +47,15 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     -- Mute volume.
   , ((0, 0x1008ff12),
-     spawn "/home/spydr/.xmonad/scripts/volume.sh toggle")
-     --spawn "amixer -c PCH -q set Master toggle")
+     spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh mute")
 
     -- Decrease volume.
   , ((0, 0x1008ff11),
-     spawn "/home/spydr/.xmonad/scripts/volume.sh down")
+     spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh decrease")
 
     -- Increase volume.
   , ((0, 0x1008ff13),
-     spawn "/home/spydr/.xmonad/scripts/volume.sh up")
+     spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh increase")
 
     -- Audio previous.
   , ((0, 0x1008FF16),
@@ -156,9 +155,10 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- Restart xmonad and xmobar
   , ((modMask .|. shiftMask, xK_r),
      spawn ("pkill xmobar " ++
-            --"&& runghc -i/home/spydr/.xmonad/lib /home/spydr/dotfiles/xmonad/info_bars/genbar.hs " ++
-            "&& /home/spydr/.xmonad/info_bars/genbar" ++
-            ">  /home/spydr/.xmonad/info_bars/xmobar.conf " ++
+            --"&& runghc -i/home/spydr/dotfiles/xmonad/lib" ++
+            --" /home/spydr/dotfiles/xmonad/info_bars/genbar.hs " ++
+            "&& /home/spydr/dotfiles/xmonad/info_bars/genbar" ++
+            ">  /home/spydr/dotfiles/xmonad/info_bars/xmobar.conf " ++
             "&& xmonad --recompile " ++
             "&& xmonad --restart"))
 

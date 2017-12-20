@@ -57,9 +57,9 @@ mybgColor            = "#1c1b1a"
 mybgColor_tag        = "#222222"
 mybgColor_urgent     = "#440000"
 
-myfgColor_current    = "#224422"
-myfgColor_hidden     = "#444422"
-myfgColor_visible    = "#224444"
+myfgColor_current    = "#555555"
+myfgColor_hidden     = "#555555"
+myfgColor_visible    = "#555555"
 myfgColor_noWindows  = "#555555"
 
 
@@ -71,9 +71,12 @@ myfgTagColor         = mybgColor_bar
 mybgTagColor         = "#000000"
 myBorderColor_bar    = "#152427"
 
-myfgLowColor_bar     = "#4a5d23"
-myfgMedColor_bar     = "#b8860b"
-myfgHighColor_bar    = "#7c1c05"
+--myfgLowColor_bar     = "#4a5d23"
+--myfgMedColor_bar     = "#b8860b"
+--myfgHighColor_bar    = "#7c1c05"
+myfgLowColor_bar     = "#555555"
+myfgMedColor_bar     = "#aaaaaa"
+myfgHighColor_bar    = "#ffffff"
 
 
 -- 8-Bit Color Theme

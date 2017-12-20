@@ -62,9 +62,9 @@ myLogHook h = dynamicLogWithPP $ def
   , ppCurrent         = xmobarColor myfgColor_current mybgColor_bar .
                           (\ _ -> wrapIcon "dot_full_16.xbm")
   , ppHidden          = xmobarColor myfgColor_hidden mybgColor_bar .
-                          (\ _ -> wrapIcon "dot_full_16.xbm")
+                          (\ _ -> wrapIcon "dot_half_16.xbm")
   , ppVisible         = xmobarColor myfgColor_visible mybgColor_bar .
-                          (\ _ -> wrapIcon "dot_full_16.xbm")
+                          (\ _ -> wrapIcon "dot_center_16.xbm")
   , ppHiddenNoWindows = xmobarColor myfgColor_noWindows mybgColor_bar .
                           (\ _ -> wrapIcon "dot_empty_16.xbm")
 
@@ -115,7 +115,7 @@ myManageHook =
     urgent = [ ]
 
     -- Programs that spawn floated
-    floatClasses = [ "Xmessage", "Eclipse", "zathura", "Thunar"]
+    floatClasses = [ "Xmessage", "Eclipse", "Thunar", "Electron", "Arandr", "Pavucontrol" ]
     floatTitles  = []
 
     -- Programs that spawn within a given workspace

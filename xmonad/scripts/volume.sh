@@ -2,11 +2,11 @@
 
 flag=false
 case $1 in
-  "up")
+  "increase")
     action="volume"
     cmd="+2%"
     ;;
-  "down")
+  "decrease")
     action="volume"
     cmd="-2%"
     ;;
@@ -23,13 +23,18 @@ case $1 in
     ;;
 esac
 
-default=$(pactl list short sinks | grep "RUNNING" | cut -f1)
-#default=$(pactl info | grep "Default Sink" | cut -f2 -d: | sed 's/^ *//')
-
 if $flag ; then
-  echo "$(pamixer --sink $default --get-volume)"
+  if [[ "$(pamixer --get-mute)" = "true" ]]; then
+    echo "$(pamixer --get-volume)"
+    #echo "_"
+  else
+    echo "$(pamixer --get-volume)"
+  fi
 else
-  pactl set-sink-$action $default $cmd
+  for SINK in `pacmd list-sinks | grep 'index:' | cut -b12-`
+  do
+    pactl set-sink-$action $SINK $cmd
+  done
 fi
 
 
