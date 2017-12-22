@@ -157,8 +157,8 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      spawn ("pkill xmobar " ++
             --"&& runghc -i/home/spydr/dotfiles/xmonad/lib" ++
             --" /home/spydr/dotfiles/xmonad/info_bars/genbar.hs " ++
-            "&& /home/spydr/dotfiles/xmonad/info_bars/genbar" ++
-            ">  /home/spydr/dotfiles/xmonad/info_bars/xmobar.conf " ++
+            --"&& /home/spydr/dotfiles/xmonad/info_bars/genbar" ++
+            --">  /home/spydr/dotfiles/xmonad/info_bars/xmobar.conf " ++
             "&& xmonad --recompile " ++
             "&& xmonad --restart"))
 

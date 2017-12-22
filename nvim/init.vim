@@ -15,7 +15,7 @@
 "{1
 
 set nocompatible
-set termguicolors
+"set termguicolors
 let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
@@ -623,15 +623,17 @@ if has("autocmd")
   augroup END
 
   function! SetBibOpts()
-    let g:tex_flavor='latex'
-    setlocal ts=4
-    setlocal sw=4
-    setlocal tw=79
-    setlocal autoindent
+    setlocal spell
+    setlocal spelllang=en_us
+
     setlocal expandtab
-    setlocal linebreak
-    setlocal fo -=l
-    setlocal fo +=t
+    setlocal shiftwidth=2
+    setlocal tabstop=2
+    setlocal textwidth=99
+
+    setlocal noautoindent
+    setlocal nocindent
+    setlocal nosmartindent
 
     setlocal foldmarker=%{,%}
     nnoremap <buffer> <Leader>h :call HeaderComment("%")<CR>
@@ -668,35 +670,6 @@ let g:currentmode={
     \ 't'  : 'Terminal'
     \}
 
-
-" Automatically change the statusline color depending on mode
-function! ChangeStatuslineColor(mode)
-  let m = g:currentmode[a:mode]
-  if (m == 'N' || m == 'N·Operator Pending')
-    hi StatusLine term=reverse guifg=#663344 guibg=#111133 gui=none
-  elseif (m == 'V' || m == 'V·Line' || m ==  'V·Block')
-    hi StatusLine term=reverse guifg=#663344 guibg=#113311 gui=bold
-  elseif (m == 'I')
-    hi StatusLine term=reverse guifg=#663344 guibg=#331111 gui=bold
-  else
-    hi StatusLine term=reverse guifg=#b19cd9 guibg=#111111 gui=none
-  endif
-  return ''
-endfunction
-
-function! ChangeStatuslineColor()
-  redraw
-  if (mode() =~# '\v(n|no)')
-  	exe 'hi! StatusLine term=reverse guifg=#111111 guibg=#787878 gui=none'
-  elseif (mode() =~# '\v(v|V)' || g:currentmode[mode()] ==# 'V·Block')
-  	exe 'hi! StatusLine term=reverse guifg=#77dd88 guibg=#3c1111 gui=none'
-  elseif (mode() ==# 'i')
-  	exe 'hi! StatusLine term=reverse guifg=#888888 guibg=#3c1111 gui=none'
-  else
-  	exe 'hi! StatusLine term=reverse guifg=#111111 guibg=#787878 gui=none'
-  endif
-endfunction
-
 " Find out current buffer's size and output it.
 function! FileSize()
   let bytes = getfsize(expand('%:p'))
@@ -720,19 +693,6 @@ function! FileSize()
   endif
 endfunction
 
-function! ReadOnly()
-  if &readonly || !&modifiable
-    return ' '
-  else
-    return ''
-endfunction
-
-function! Modified()
-  if &modified
-    return ' ✖'
-  else
-    return ''
-endfunction
 
 function! EFName()
   let l:fname = expand('%:t:r')
@@ -767,14 +727,13 @@ function! StatuslineGit()
   return ' '.l:title
 endfunction
 
+
 " color status line based on mode
 autocmd! InsertEnter * hi StatusLine term=reverse guifg=#888888 guibg=#3c1111 gui=none
 autocmd! InsertLeave * hi StatusLine term=reverse guifg=#111111 guibg=#787878 gui=none
 
-set laststatus=2
+set laststatus=1
 set statusline=
-"set statusline+=%{ChangeStatuslineColor(mode())}
-"set statusline+=%{ChangeStatuslineColor()}
 set statusline+=\ ❲%{toupper(g:currentmode[mode()])}❳\ |    "current mode
 set statusline+=❲%n❳\ \ |                                   "buffernumber
 set statusline+=%1*|                                        "switch to User1 hi group

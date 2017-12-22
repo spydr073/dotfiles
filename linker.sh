@@ -38,7 +38,7 @@ ln -sv "$DOTFILES/tmux/tmux.conf" "$HOME/.tmux.conf"
 
 
 #-- Link Termite file
-ln -sv "$DOTFILES/termite/config" "$HOME/.config/termite/config"
+ln -sv "$DOTFILES/termite" "$HOME/.config/termite"
 
 
 

@@ -133,37 +133,33 @@ myManageHook =
 --{2 Layout
 
 myLayoutHook = onWorkspaces ["5"] gimpLayoutFirst $
-               onWorkspaces ["1", "8"] floatLayoutFirst $
                defaultLayoutOrder
+
   where
+
     gimpLayoutFirst =
           named "Gimp" gimp
       ||| named "Default" tiled
       ||| named "Float" float
       ||| named "Full" full
 
-    floatLayoutFirst =
-          named "Float" float
-      ||| named "Full" full
-      ||| named "Default" tiled
-      ||| named "Padded" padded
-
     defaultLayoutOrder =
           named "Default" tiled
       ||| named "Float" float
       ||| named "Full" full
-      ||| named "Padded" padded
 
-    tiled = smartSpacing 3 (Tall 1 (3/100) (1/3))
-    padded = spacing 4 (Tall 1 (3/100) (1/3))
+    tiled = smartBorders $ smartSpacing 4 (Tall 1 (3/100) (0.5))
+
     float = simplestFloat
-    full = noBorders Full
-    gimp = withIM (0.11)
-                  (Role "gimp-toolbox")
-                  (reflectHoriz (withIM (0.15)
-                                        (Role "gimp-dock")
-                                        (Mirror (Tall 1 (3/100) (1/2))
-                                            ||| Full)))
+
+    full  = noBorders Full
+
+    gimp  = withIM (0.11)
+                   (Role "gimp-toolbox")
+                   (reflectHoriz (withIM (0.15)
+                                         (Role "gimp-dock")
+                                         (Mirror (Tall 1 (3/100) (1/2))
+                                             ||| Full)))
 
 --}
 

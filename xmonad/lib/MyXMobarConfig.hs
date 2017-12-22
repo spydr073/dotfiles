@@ -100,7 +100,7 @@ tag_right_end =
 --{1
 
 myConfig = XMobar {
-  font             = "xft:Anonymous Pro:size=10:bold:antialias=true"
+  font             = "xft:Anonymous Pro:size=11:bold:antialias=true"
     --font             = "xft:Terminus:size=10:bold:antialias=true"
     --font             = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
   , additionalFonts  = []
