@@ -61,7 +61,7 @@ hi String         gui=none       guifg=#e6fff3   guibg=none  "guibg=#000000
 hi Structure      gui=bold       guifg=#f070a0   guibg=none  "guibg=#000000
 hi Tag            gui=none       guifg=#61a181   guibg=none  "guibg=#000000
 hi Title          gui=bold       guifg=#e6fff3   guibg=none  "guibg=#1d3026
-hi Todo           gui=none       guifg=#1d3026   guibg=none  "guibg=#9bcfb5
+hi Todo           gui=bold       guifg=#884433   guibg=none  "guibg=#9bcfb5
 hi Type           gui=bold       guifg=#e6fff3   guibg=none  "guibg=#000000
 hi Typedef        gui=bold       guifg=#f070a0   guibg=none  "guibg=#000000
 hi Underlined     gui=underline  guifg=#e6fff3   guibg=none  "guibg=#000000

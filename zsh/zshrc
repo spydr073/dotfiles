@@ -11,7 +11,6 @@
 #──────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-
 #--------------------------------------------------------------------------------------[ Settings ]
 #{{{1
 
@@ -53,7 +52,6 @@ export -U PATH                                   # export path var
 
 #}}}
 
-
 #-----------------------------------------------------------------------------------------[ Hooks ]
 #{{{1
 
@@ -69,11 +67,16 @@ function chpwd() {
 
 #}}}
 
-
 #---------------------------------------------------------------------------------------[ Aliases ]
 #{{{
 
-alias ls='ls --color -kLNost'
+#-- nix envs
+alias env-idris='nix-shell ~/dotfiles/nix/env/idris.nix'
+
+#-- launch idris with local libraries in path
+alias idris='idris -p effects -i ~/projects/idris'
+
+alias ls='ls --color -kLNosth'
 alias reload='source ~/.zshrc; clear'
 alias pp='ps axuf | pager'
 
@@ -98,9 +101,8 @@ function nix-search() { nix-env -qaP | grep -i "$1"; }
 
 #}}}
 
-
 #-------------------------------------------------------------------------------------[ Functions ]
-#{{{1
+#{1
 
 #-- Dir String {{{2
 # from http://stackoverflow.com/questions/16147173/command-prompt-directory-styling
@@ -203,8 +205,7 @@ git_prompt_string() {
 }
 #}}}
 
-#}}}
-
+#}
 
 #----------------------------------------------------------------------------------------[ Prompt ]
 #{{{1

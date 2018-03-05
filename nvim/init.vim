@@ -15,7 +15,7 @@
 "{1
 
 set nocompatible
-"set termguicolors
+set termguicolors
 let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
@@ -125,6 +125,21 @@ function! HeaderComment(commentChar)
   call setline('.', a:commentChar . fillStr . "[ " . line . " ]")
 endfunc
 
+function! Header(commentChar)
+  call append(1, a:commentChar . repeat("-", 89 - strlen(a:commentChar)) . "[ Module ]")
+  call append(2, a:commentChar . "\{1")
+  call append(3, a:commentChar . repeat(" ", 80 - strlen(a:commentChar)) .  "(\\_/)")
+  call append(4, a:commentChar . repeat(" ", 80 - strlen(a:commentChar)) .  "(o.O)")
+  call append(5, a:commentChar . repeat(" ", 80 - strlen(a:commentChar)) . "(> <)")
+  call append(6, a:commentChar . repeat(" ", 79 - strlen(a:commentChar)) . "#######")
+  call append(7, a:commentChar . repeat(" ", 77 - strlen(a:commentChar)) . "KILLER BUNNY")
+  call append(8, a:commentChar . repeat(" ", 79 - strlen(a:commentChar)) . "APPROVED")
+  call append(9, "")
+  call append(10, "")
+  call append(11, a:commentChar . "\}")
+  call append(12, "")
+endfunc
+
 function! FoldText()
   let line = substitute(getline(v:foldstart), '^\(.*\){\d*\s*', '', 'g') . ' '
   let lines_count = v:foldend - v:foldstart + 1
@@ -173,8 +188,13 @@ nnoremap <S-r> :so ~/dotfiles/nvim/init.vim<CR>|     " reload config file
 nnoremap <Bslash> :|                                 " remap cmd mode
 
 nnoremap <Leader>b :ls<CR>:b<Space>|                 " better buffer switching
+nnoremap <Leader>] :bn<CR>|                          " next buffer
+nnoremap <Leader>[ :bp<CR>|                          " previous buffer
+
 nnoremap <Leader>f :NERDTreeToggle<CR>|              " toggle nerdtree
+
 nnoremap <Leader><Space> za|                         " toggle folds
+
 nnoremap <Leader>n :call NumberToggle()<CR>|         " toggle relative line numbers
 
 nnoremap <Leader>e :e |                              " open file
@@ -451,6 +471,7 @@ if has("autocmd")
 
     setlocal foldmarker=--{,--}
     nnoremap <buffer> <Leader>h :call HeaderComment("--")<CR>
+    nnoremap <buffer> <Leader>H :call Header("--")<CR>
 
   endfunction
   "}
@@ -590,12 +611,12 @@ if has("autocmd")
   function! SetLatexOpts()
     let g:tex_flavor = "latex"
 
-    let g:tex_indent_brace = 0
-    let g:tex_indent_items = 1
-    let g:tex_items        = 1
-    let g:tex_itemize_env  = 1
-    let g:tex_noindent_env = 1
-    let g:tex_indent_and   = 1
+    "let g:tex_indent_brace = 0
+    "let g:tex_indent_items = 1
+    "let g:tex_items        = 1
+    "let g:tex_itemize_env  = 1
+    "let g:tex_noindent_env = 1
+    "let g:tex_indent_and   = 1
 
     setlocal spell
     setlocal spelllang=en_us
@@ -612,6 +633,7 @@ if has("autocmd")
     setlocal foldmarker=%{,%}
     nnoremap <buffer> <Leader>h :call HeaderComment("%")<CR>
     nnoremap <leader>m ;w<CR>;silent !latexmk -quiet -pv "%"; latexmk -c "%"<CR><CR>;redraw!<CR>
+    nnoremap == vipgq
 
   endfunction
   "}
@@ -732,7 +754,7 @@ endfunction
 autocmd! InsertEnter * hi StatusLine term=reverse guifg=#888888 guibg=#3c1111 gui=none
 autocmd! InsertLeave * hi StatusLine term=reverse guifg=#111111 guibg=#787878 gui=none
 
-set laststatus=1
+set laststatus=2
 set statusline=
 set statusline+=\ ❲%{toupper(g:currentmode[mode()])}❳\ |    "current mode
 set statusline+=❲%n❳\ \ |                                   "buffernumber

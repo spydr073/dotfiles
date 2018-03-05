@@ -107,8 +107,9 @@ myManageHook =
 
   , [ title        =? x --> doCenterFloat'  | x <- urgent           ]
   , [ isDialog          --> doCenterFloat'                          ]
+
   , [ isFullscreen      --> doFullFloat'                            ]
---  , [ return True       --> doMaster                                ]
+  --, [ return True       --> doMaster                                ]
   ])
   where
     -- Important windows get floated to the center of ALL workspaces
@@ -126,29 +127,37 @@ myManageHook =
     doFloatAt' x y = doFloatAt x y
     doSideFloat' p = doSideFloat p
     doRectFloat' r = doRectFloat r
-    doFullFloat' = doFullFloat
+    doFullFloat'   = doFullFloat
 
 --}
 
 --{2 Layout
 
-myLayoutHook = onWorkspaces ["5"] gimpLayoutFirst $
-               defaultLayoutOrder
+myLayoutHook = onWorkspaces ["1", "8"] floatFirst
+             $ onWorkspaces ["3"] fullFirst
+             $ onWorkspaces ["5"] gimpFirst
+             $ defaultOrder
 
   where
 
-    gimpLayoutFirst =
-          named "Gimp" gimp
-      ||| named "Default" tiled
-      ||| named "Float" float
-      ||| named "Full" full
+    floatFirst = named "Float" float
+             ||| named "Full" full
+             ||| named "Default" tiled
 
-    defaultLayoutOrder =
-          named "Default" tiled
-      ||| named "Float" float
-      ||| named "Full" full
+    fullFirst = named "Full" full
+            ||| named "Default" tiled
+            ||| named "Float" float
 
-    tiled = smartBorders $ smartSpacing 4 (Tall 1 (3/100) (0.5))
+    gimpFirst = named "Gimp" gimp
+            ||| named "Default" tiled
+            ||| named "Float" float
+            ||| named "Full" full
+
+    defaultOrder = named "Default" tiled
+               ||| named "Float" float
+               ||| named "Full" full
+
+    tiled = smartBorders $ smartSpacing 16 (Tall 1 (3/100) (0.5))
 
     float = simplestFloat
 

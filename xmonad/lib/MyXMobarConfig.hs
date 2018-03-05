@@ -100,9 +100,7 @@ tag_right_end =
 --{1
 
 myConfig = XMobar {
-  font             = "xft:Anonymous Pro:size=11:bold:antialias=true"
-    --font             = "xft:Terminus:size=10:bold:antialias=true"
-    --font             = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
+    font             = "xft:Anonymous Pro:size=10:bold:antialias=true"
   , additionalFonts  = []
   , iconOffset       = -1
   , textOffset       = -1
@@ -156,8 +154,8 @@ myConfig = XMobar {
                 ([ "--template" , (tag_right "net_up" "<tx> ") ++
                                   (tag_right "net_down" "<rx> ")
                  , "--minwidth" , "4"
-                 , "--Low"      , "1000" -- units: kB/s
-                 , "--High"     , "5000" -- units: kB/s
+                 , "--Low"      , "1000000" -- units: mbits/s
+                 , "--High"     , "5000000" -- units: mbits/s
                  ] ++ gradient)
                 10
 
@@ -191,9 +189,9 @@ myConfig = XMobar {
                 , "--Low"      , "20" -- units: %
                 , "--High"     , "80" -- units: %
                 , "--"           -- battery specific options
-                , "-o"         , (icon "zap") ++ " [<left>,<timeleft>]"  -- discharge
-                , "-O"         , (icon "plug") ++ " [<left>,<timeleft>]" -- charge
-                , "-i"         , (icon "full_bat")                      -- full
+                , "-o"         , (icon "zap") ++ " <left> • <timeleft>"  -- discharge
+                , "-O"         , (icon "plug") ++ " <left> • <timeleft>" -- charge
+                , "-i"         , (icon "full_bat")                     -- full
                 ]
                 50
 

@@ -43,7 +43,7 @@ myModMask :: Foreign.C.Types.CUInt
 myModMask = mod4Mask
 
 myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
+myFocusFollowsMouse = False
 
 myClickJustFocuses :: Bool
 myClickJustFocuses  = True
@@ -60,7 +60,7 @@ myTerminal :: String
 myTerminal = "/run/current-system/sw/bin/termite"
 
 myLockScreen:: String
-myLockScreen = "~/bin/lock.sh"
+myLockScreen = "/run/current-system/sw/bin/slimlock"
 
 myScreenshot :: String
 myScreenshot = "scrot"
