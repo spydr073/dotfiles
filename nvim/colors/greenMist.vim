@@ -92,7 +92,8 @@ hi vCursor        gui=none       guifg=#b19cd9   guibg=#000000
 
 hi StatusLine     gui=none       guifg=#111111   guibg=#787878
 hi User1          gui=none       guifg=#b19cd9   guibg=#1c1c1c
-hi User2          gui=none       guifg=#e6fff3   guibg=#1c1c1c
+"hi User2          gui=none       guifg=#e6fff3   guibg=#1c1c1c
+hi User2          gui=none       guifg=#114444   guibg=#1c1c1c
 hi User3          gui=none       guifg=#bb2222   guibg=#1c1c1c
 
 

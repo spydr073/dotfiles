@@ -1,4 +1,9 @@
 
+*.o
+*.hi
+*.errors
+*.ibc
+
 nvim/plugins
 
 xmonad/xmonad-x86_64-linux
@@ -6,10 +11,11 @@ xmonad/xmonad.state
 xmonad/info_bars/genbar
 xmonad/info_bars/xmobar.conf
 
-*.o
-*.hi
-*.errors
-*.ibc
-
+emacs/backup
+emacs/custom.el
+emacs/elpa
+emacs/eshell
+emacs/undohist
+emacs/var
 
 

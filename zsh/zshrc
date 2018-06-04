@@ -234,12 +234,9 @@ RIGHT="$FGCOLOR)"
 JOBS="╰─($INFOCOLOR%j$FGCOLOR)"
 CMDPROMT="─╼$RESETCOLOR "
 
-PROMPT='$START$MACHINE$LEFT$(dir_prompt_string)$RIGHT─$LEFT$(git_prompt_string)$RIGHT
+PROMPT=$'$START$MACHINE$LEFT$(dir_prompt_string)$RIGHT─$LEFT$(git_prompt_string)$RIGHT
 $JOBS$CMDPROMT'
 RPROMPT=''
 #}}}
 
 #}}}
-
-
-

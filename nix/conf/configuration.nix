@@ -21,9 +21,9 @@ in  {
     ];
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "17.09";
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.09;
+  #system.stateVersion = "17.09";
+  #system.autoUpgrade.enable = true;
+  #system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.09;
 
   boot = {
     initrd = {
@@ -118,9 +118,9 @@ in  {
         995  #- POP3S
         6600 #- MPD
         8080 #- HTTPS
-	8118 #- Privoxy (for tor client)
-	9050 #- TOR (slow)
-	9063 #- TOR (fast)
+	#8118 #- Privoxy (for tor client)
+	#9050 #- TOR (slow)
+	#9063 #- TOR (fast)
       ];
       allowedUDPPorts = [
         53   #- DNS
@@ -274,14 +274,16 @@ in  {
      dmenu2
      weechat
 
+     google-chrome
      firefox
      imagemagick
      gimp
      qpdfview
      mplayer
      vlc
+     #skype
 
-     tor-browser-bundle-bin
+     #tor-browser-bundle-bin
 
      mpd
      ncmpcpp
@@ -359,10 +361,10 @@ in  {
       #"0 2 * * * root fstrim /"
     ];
 
-    tor = {
-      enable = true;         #- for port 9050
-      client.enable = true;  #- for port 9063 (and 8118)
-    };
+    #tor = {
+    #  enable = true;         #- for port 9050
+    #  client.enable = true;  #- for port 9063 (and 8118)
+    #};
 
     redshift = {
         enable = true;
@@ -516,6 +518,8 @@ in  {
       gentium
       inconsolata
       anonymousPro
+
+      powerline-fonts
     ];
   };
 
