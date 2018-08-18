@@ -15,9 +15,15 @@
 "--{1
 
 set nocompatible
+
 set termguicolors
 let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+let &t_SI .= "\<Esc>[5 q"| "insert mode  - line
+let &t_SR .= "\<Esc>[4 q"| "replace mode - underline
+let &t_EI .= "\<Esc>[3 q"| "normal mode  - block
+set guicursor=| "reset cursor to terminal default on exit
 
 scriptencoding utf-8
 set termencoding=utf-8
@@ -39,6 +45,7 @@ if dein#load_state(expand('~/dotfiles/nvim/plugins/'))
     call dein#add('Shougo/dein.vim')
     call dein#add('scrooloose/nerdtree')
     call dein#add('idris-hackers/idris-vim.git')
+    call dein#add('LnL7/vim-nix')
   call dein#end()
   call dein#save_state()
 endif
@@ -359,10 +366,35 @@ if has("autocmd")
   "--{2 Config
   augroup Config
     autocmd!
-    autocmd bufread,bufnewfile,bufenter *.conf,*.nix call SetConfigOpts()
+    autocmd bufread,bufnewfile,bufenter *.conf call SetConfigOpts()
   augroup END
 
   function! SetConfigOpts()
+    setlocal expandtab
+    setlocal autoindent
+    setlocal smartindent
+    setlocal copyindent
+    setlocal shiftwidth=2
+    setlocal tabstop=2
+    setlocal wrap
+    setlocal linebreak
+    setlocal nolist
+    setlocal wrapmargin=0
+    setlocal textwidth=99
+
+    setlocal foldmarker=#{,#}
+    nnoremap <buffer> <Leader>h Section("#")<CR>
+
+  endfunction
+  "--}
+
+  "--{2 Nix
+  augroup Nix
+    autocmd!
+    autocmd bufread,bufnewfile,bufenter *.nix call SetNixOpts()
+  augroup END
+
+  function! SetNixOpts()
     setlocal expandtab
     setlocal autoindent
     setlocal smartindent

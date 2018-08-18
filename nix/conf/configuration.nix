@@ -6,13 +6,16 @@
 
 let
 
-    wallpaper = "/home/spydr/media/imgs/wallpaper/circle.jpg";
+    wallpaper  = "/home/spydr/media/imgs/wallpaper/circle.jpg";
+
+    latitude   = "37.1773";
+    longitude  = "3.59860";
 
 in  {
 
 #}
 
-#---------------------------------------------------------------------[ Boot, Kernel, and Modules ]
+#-------------------------------------------------------------------------------[ Boot and Kernel ]
 #{1
 
   imports =
@@ -21,9 +24,9 @@ in  {
     ];
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  #system.stateVersion = "17.09";
-  #system.autoUpgrade.enable = true;
-  #system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.09;
+  system.stateVersion = "18.03";
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.channel = https://nixos.org/channels/nixos-18.03;
 
   boot = {
     initrd = {
@@ -45,13 +48,11 @@ in  {
         device = "nodev";
         efiSupport = true;
       };
-      #systemd-boot.enable = true;
+      systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
 
     kernelPackages = pkgs.linuxPackages_latest;
-    #kernelPackages = pkgs.linuxPackages_stable;
-    #kernelPackages = pkgs.linuxPackages_latest_xen_dom0;
 
     kernelParams = [
         "intel_pstate=no_hwp"
@@ -77,12 +78,18 @@ in  {
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
 
   hardware = {
-    bluetooth.enable = true;
+    enableAllFirmware = true;
+    cpu.intel.updateMicrocode = true;
+
+    #-- for scanners
+    sane.enable = true;
+
     opengl = {
       driSupport32Bit = true;
       extraPackages   = [ pkgs.vaapiIntel ];
       extraPackages32 = [ pkgs.vaapiIntel ];
     };
+
     pulseaudio = {
       enable = true;
       package = pkgs.pulseaudioFull;
@@ -91,7 +98,10 @@ in  {
       #  load-module module-switch-on-connect
       #'';
     };
-  };
+
+    bluetooth.enable = true;
+
+ };
 
 #}
 
@@ -99,9 +109,19 @@ in  {
 #{
 
   networking = {
-    hostName = "localhost";
+    hostName   = "localhost";
     enableIPv6 = true;
-    networkmanager.enable = true;
+
+    networkmanager = {
+      enable = true;
+    };
+
+    #wireless = {
+    #  enable                = true;
+    #  interfaces            = [ "wlp3s0" ];
+    #  userControlled.enable = true;
+    #  userControlled.group  = "wheel";
+    # };
 
     firewall = {
       enable = true;
@@ -118,9 +138,9 @@ in  {
         995  #- POP3S
         6600 #- MPD
         8080 #- HTTPS
-	#8118 #- Privoxy (for tor client)
-	#9050 #- TOR (slow)
-	#9063 #- TOR (fast)
+        8118 #- Privoxy (for tor client)
+        9050 #- TOR (slow)
+        9063 #- TOR (fast)
       ];
       allowedUDPPorts = [
         53   #- DNS
@@ -137,13 +157,14 @@ in  {
 
   # Select internationalisation properties.
   i18n = {
-    consoleFont = "lat9w-16";
+    consoleFont   = "lat9w-16";
     consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
   };
 
   # Set your time zone.
-  time.timeZone = "America/Denver";
+  #time.timeZone = "America/Denver";
+  time.timeZone = "Europe/Madrid";
 
 #}
 
@@ -157,6 +178,8 @@ in  {
     };
 
     extraOptions = ''
+      binary-caches-parallel-connections = 50
+
       auto-optimise-store = true
       keep-outputs = true
 
@@ -165,8 +188,9 @@ in  {
       gc-keep-derivations = true
     '';
 
-    binaryCaches = [ "https://cache.nixos.org" ];
-    trustedBinaryCaches = [ "https://cache.nixos.org" ];
+    binaryCaches              = [ "https://cache.nixos.org" ];
+    trustedBinaryCaches       = [ "https://cache.nixos.org" ];
+
     requireSignedBinaryCaches = false;
 
   };
@@ -178,14 +202,6 @@ in  {
     zsh.enable = true;
     dmenu.enableXft = true;
 
-    firefox = {
-      enableGoogleTalkPlugin = true;
-      #enableAdobeFlash = true;
-      enableAdobeFlashDRM = true;
-      jre = false;
-      icedtea = true;
-    };
-
     packageOverrides = pkgs : {
       #jre = pkgs.oraclejre8;
       #jdk = pkgs.oraclejdk8;
@@ -194,109 +210,138 @@ in  {
 
   };
 
-  environment.systemPackages = with pkgs; [
-     sudo
-     manpages
-     binutils
-     gnumake
-     stdenv
-     nix
+  environment = {
 
-     avrbinutils
-     avrgcc
-     avrlibc
-     dfu-util
-     dfu-programmer
+    variables = {
+      BROWSER = pkgs.lib.mkOverride 0 "firefox";
+      EDITOR  = pkgs.lib.mkOverride 0 "nvim";
+    };
 
-     qemu
-     OVMF
-     libvirt
+    shells = [ pkgs.zsh ];
 
-     gcc
-     haskellPackages.ghc
-     haskellPackages.idris
-     openjdk
-     python
-     guile
-     #nodejs
-     R
+    systemPackages = with pkgs; [
+      #-- System
+      sudo
+      manpages
+      binutils
+      gnumake
+      stdenv
+      nix
 
-     rfkill
-     lsof
-     iptables
-     dhcp
-     dnsutils
-     aria
-     wget
-     nmap
-     tcpdump
-     macchanger
+      #-- embeded programming
+      #avrbinutils
+      #avrgcc
+      #avrlibc
+      #dfu-util
+      #dfu-programmer
 
-     bluez
-     blueman
+      #-- virtual envs
+      #qemu
+      #OVMF
+      #libvirt
 
-     p7zip
-     zip
-     unzip
-     gzip
-     unrar
-     zlib
+      #-- Langs
+      gcc
+      haskellPackages.ghc
+      haskellPackages.idris
+      openjdk
+      python
+      guile
+      R
 
-     gitAndTools.gitFull
-     bash
-     zsh
-     termite
-     tmux
-     neovim
-     links
-     feh
-     scrot
+      #-- Networking
+      rfkill
+      lsof
+      iptables
+      wirelesstools
+      wget
+      nmap
+      tcpdump
+      macchanger
+      dnsmasq
+      #wpa_supplicant
+      #wpa_supplicant_gui
 
-     tree
-     python35Packages.youtube-dl
+      #-- Bluetooth
+      bluez
+      blueman
 
-     xclip
-     unclutter
-     compton
-     redshift
-     arandr
-     xfontsel
-     xlsfonts
+      #-- Compression
+      p7zip
+      zip
+      unzip
+      gzip
+      unrar
+      zlib
 
-     aspell
-     aspellDicts.en
-     gnuplot
-     graphviz
-     texlive.combined.scheme-full
-     pandoc
+      #-- Dev
+      gitAndTools.gitFull
+      bash
+      zsh
+      termite
+      tmux
+      neovim
 
-     ranger
-     dmenu2
-     weechat
+      #-- System Utils
+      xclip
+      unclutter
+      compton
+      redshift
+      arandr
+      xfontsel
+      xlsfonts
 
-     google-chrome
-     firefox
-     imagemagick
-     gimp
-     qpdfview
-     mplayer
-     vlc
-     #skype
+      #-- Documents
+      aspell
+      aspellDicts.en
+      gnuplot
+      graphviz
+      texlive.combined.scheme-full
+      pandoc
 
-     #tor-browser-bundle-bin
+      #-- CLI Programs
+      links
+      feh
+      scrot
+      tree
+      python35Packages.youtube-dl
+      ranger
+      dmenu2
+      weechat
 
-     mpd
-     ncmpcpp
-     ffmpeg
-     pavucontrol
-     pamixer
+      htop
+      iotop
+      tree
 
-     haskellPackages.xmobar
-     haskellPackages.xmonad
-     haskellPackages.xmonad-contrib
-     haskellPackages.xmonad-extras
+      #-- GUI Programs
+      google-chrome
+      firefox
+      tor-browser-bundle-bin
+      qutebrowser
+      imagemagick
+      gimp
+      qpdfview
+      mplayer
+      skype
+      slack
 
-  ];
+      #-- Media
+      mpd
+      ncmpcpp
+      ffmpeg
+      pavucontrol
+      pamixer
+      vlc
+
+      #-- WM
+      haskellPackages.xmobar
+      haskellPackages.xmonad
+      haskellPackages.xmonad-contrib
+      haskellPackages.xmonad-extras
+
+    ];
+
+  };
 
 #}
 
@@ -306,22 +351,21 @@ in  {
   # Define a user account. Don't forget to set a password with ‘passwd’.
   #users.defaultUserShell = "${pkgs.zsh}bin/zsh";
   users.extraUsers.spydr = {
-    name = "spydr";
+    shell           = "/run/current-system/sw/bin/zsh";
+    name            = "spydr";
     initialPassword = "";
-    group = "users";
-    createHome = true;
-    home = "/home/spydr";
-    extraGroups = [ "wheel"
-                    "disk"
-                    "audio"
-                    "video"
-                    "cdrom"
-                    "power"
-                    "lp"
-                    "systemd-journal"
-                    "networkmanager"
-                  ];
-    shell = "/run/current-system/sw/bin/zsh";
+    group           = "users";
+    createHome      = true;
+    home            = "/home/spydr";
+    extraGroups     = [ "wheel"
+                        "disk"
+                        "audio"
+                        "video"
+                        "cdrom"
+                        "power"
+                        "lp"
+                        "systemd-journal"
+                      ];
   };
 
 #}
@@ -329,14 +373,27 @@ in  {
 #------------------------------------------------------------------------------------[ Enviroment ]
 #{1
 
+  programs = {
+    zsh.enable  = true;
+    tmux.enable = true;
+
+    zsh.enableCompletion  = true;
+    bash.enableCompletion = true;
+  };
+
   security = {
-    sudo.enable = true;
+    sudo.enable             = true;
     sudo.wheelNeedsPassword = true;
   };
 
   services = {
 
-    nixosManual.showManual = true;
+    acpid.enable  = true;
+    upower.enable = true;
+
+    logind.extraConfig = "
+      HandlePowerKey=suspend
+    ";
 
     journald = {
       extraConfig = ''
@@ -346,14 +403,13 @@ in  {
 
     dbus.enable = true;
 
-    # Power management (e.g. suspend on lid close)
-    acpid.enable = true;
-    upower.enable = true;
-
-    printing.enable = true;
+    printing = {
+        enable  = true;
+        drivers = [ pkgs.gutenprint pkgs.hplip ];
+    };
 
     openssh = {
-      enable = true;
+      enable          = true;
       permitRootLogin = "no";
     };
 
@@ -361,17 +417,17 @@ in  {
       #"0 2 * * * root fstrim /"
     ];
 
-    #tor = {
-    #  enable = true;         #- for port 9050
-    #  client.enable = true;  #- for port 9063 (and 8118)
-    #};
+    tor = {
+      enable        = true;  #- for port 9050
+      client.enable = true;  #- for port 9063 (and 8118)
+    };
 
     redshift = {
-        enable = true;
-        latitude = "46.5884";
-        longitude = "-112.0245";
-        temperature.day = 6500;
+        enable            = true;
+        temperature.day   = 6500;
         temperature.night = 2700;
+        latitude          = "${latitude}";
+        longitude         = "${longitude}";
     };
 
     xserver = {
@@ -385,34 +441,11 @@ in  {
         enableContribAndExtras = true;
       };
 
-      #libinput = {
-      #  enable = true;
-      #  tapping = false;
-      #  clickMethod = "clickfinger";
-      #  disableWhileTyping = true;
-      #  scrollMethod = "twofinger";
-      #  naturalScrolling = true;
-      #};
-
-      synaptics = {
-          enable = true;
-          minSpeed = "0.1";
-          maxSpeed = "10";
-          accelFactor = "0.5";
-
-          tapButtons = true;
-          palmDetect = true;
-
-          twoFingerScroll = false;
-          vertEdgeScroll = true;
-          horizontalScroll = true;
-
-          additionalOptions = ''
-              # "Natural" scrolling
-              Option "VertScrollDelta" "-30"
-              Option "HorizScrollDelta" "-30"
-              Option "EmulateMidButtonTime" "100"
-          '';
+      libinput = {
+        enable             = true;
+        disableWhileTyping = true;
+        tappingDragLock	   = false;
+        accelSpeed         = "5.0";
       };
 
       videoDrivers = [ "intel" ];
@@ -423,10 +456,10 @@ in  {
 	slim = {
           enable = true;
           defaultUser = "spydr";
-          theme = pkgs.fetchurl {
-            url = "https://github.com/edwtjo/nixos-black-theme/archive/v1.0.tar.gz";
-            sha256 = "13bm7k3p6k7yq47nba08bn48cfv536k4ipnwwp1q1l2ydlp85r9d";
-          };
+          #theme = pkgs.fetchurl {
+          #  url = "https://github.com/edwtjo/nixos-black-theme/archive/v1.0.tar.gz";
+          #  sha256 = "13bm7k3p6k7yq47nba08bn48cfv536k4ipnwwp1q1l2ydlp85r9d";
+          # };
         };
 
         sessionCommands = ''
@@ -449,52 +482,60 @@ in  {
   systemd.user.services = {
 
     "macchanger-wired" = {
-      description = "spoof wired interface MAC";
-      wants       = [ "network-pre.target" ];
-      wantedBy    = [ "multi-user.target" ];
-      before      = [ "network-pre.target" ];
-      bindsTo     = [ "sys-subsystem-net-devices-enp2s0.device" ];
-      after       = [ "sys-subsystem-net-devices-enp2s0.device" ];
-      script = ''
-          ${pkgs.macchanger}/bin/macchanger -e enp2s0
-      '';
-      serviceConfig.Type = "oneshot";
+       enable = true;
+       description = "spoof wired interface MAC";
+       wants       = [ "network-pre.target" ];
+       wantedBy    = [ "multi-user.target" ];
+       before      = [ "network-pre.target" ];
+       bindsTo     = [ "sys-subsystem-net-devices-enp2s0.device" ];
+       after       = [ "sys-subsystem-net-devices-enp2s0.device" ];
+       script = ''
+           ${pkgs.macchanger}/bin/macchanger -e enp2s0
+       '';
+       serviceConfig.Type = "oneshot";
     };
 
     "macchanger-wireless" = {
-      description = "spoof wireless interface MAC";
-      wants       = [ "network-pre.target" ];
-      wantedBy    = [ "multi-user.target" ];
-      before      = [ "network-pre.target" ];
-      bindsTo     = [ "sys-subsystem-net-devices-wlp3s0.device" ];
-      after       = [ "sys-subsystem-net-devices-wlp3s0.device" ];
-      script = ''
-          ${pkgs.macchanger}/bin/macchanger -e wlp3s0
-      '';
-      serviceConfig.Type = "oneshot";
+       enable = true;
+       description = "spoof wireless interface MAC";
+       wants       = [ "network-pre.target" ];
+       wantedBy    = [ "multi-user.target" ];
+       before      = [ "network-pre.target" ];
+       bindsTo     = [ "sys-subsystem-net-devices-wlp3s0.device" ];
+       after       = [ "sys-subsystem-net-devices-wlp3s0.device" ];
+       script = ''
+           ${pkgs.macchanger}/bin/macchanger -e wlp3s0
+       '';
+       serviceConfig.Type = "oneshot";
     };
 
     "unclutter" = {
-        enable = true;
-        description = "hide cursor after X seconds idle";
-        wantedBy = [ "default.target" ];
-        serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = 2;
-        serviceConfig.ExecStart = "${pkgs.unclutter}/bin/unclutter";
+       enable = true;
+       description = "hide cursor after X seconds idle";
+       wantedBy = [ "default.target" ];
+       serviceConfig.Restart = "always";
+       serviceConfig.RestartSec = 2;
+       serviceConfig.ExecStart = "${pkgs.unclutter}/bin/unclutter";
     };
 
     "compton" = {
-        enable = true;
-        description = "add effects to xorg";
-        wantedBy = [ "default.target" ];
-        path = [ pkgs.compton ];
-        serviceConfig.Type = "forking";
-        serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = 2;
-        serviceConfig.ExecStart = "${pkgs.compton}/bin/compton -b --config /home/spydr/dotfiles/compton/compton.conf";
+       enable = true;
+       description = "add effects to xorg";
+       wantedBy = [ "default.target" ];
+       path = [ pkgs.compton ];
+       serviceConfig.Type = "forking";
+       serviceConfig.Restart = "always";
+       serviceConfig.RestartSec = 2;
+       serviceConfig.ExecStart = ''
+        ${pkgs.compton}/bin/compton -b --config /home/spydr/dotfiles/compton/compton.conf
+       '';
     };
 
   };
+
+  #-- Enable custom systemd services
+  systemd.services.macchanger-wired.enable    = true;
+  systemd.services.macchanger-wireless.enable = true;
 
 #}
 
@@ -507,23 +548,21 @@ in  {
     enableGhostscriptFonts = true;
     fonts = with pkgs; [
       corefonts
-      clearlyU
-      cm_unicode
       dejavu_fonts
-      freefont_ttf
       terminus_font
-      ttf_bitstream_vera
-
-      hasklig
-      gentium
       inconsolata
       anonymousPro
-
       powerline-fonts
     ];
   };
 
 #}
 
+#------------------------------------------------------------------------------------------[ EOF ]
+#{1
+
 }
+
+#}
+
 

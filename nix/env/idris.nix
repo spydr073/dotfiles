@@ -7,7 +7,20 @@ stdenv.mkDerivation {
   buildInputs = [ gcc gmp ];
 
   shellHook = ''
-    export PS1="\n\[\033[1;32m\]λ idris »\[\033[0m\] "
+
+    export CLIICOLOR=1
+
+    FGCOLOR="\e[38;2;100;85;100m"
+    INFOCOLOR="\e[38;2;170;170;140m"
+    RESETCOLOR="\[\033[0m\]"
+
+    # ⚞ ➙ ⮞  ꠩ ␥ ▹
+    START="$FGCOLOR╭─"
+    LANG="[$INFOCOLOR λ ␥ idris-env $FGCOLOR]─"
+    DIR="[$INFOCOLOR \w $FGCOLOR]"
+    CMDPROMT="╰──╼$RESETCOLOR "
+
+    export PS1="\n$START$LANG$DIR\n$CMDPROMT"
 
     alias idris='idris -p effects -i ~/projects/idris'
     alias ls='ls --color -kLNosth'
@@ -19,9 +32,6 @@ stdenv.mkDerivation {
     function precmd() {
       print ""
     }
-
-    #function preexec() {
-    #}
 
   '';
 

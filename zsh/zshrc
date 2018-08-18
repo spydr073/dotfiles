@@ -47,8 +47,10 @@ unsetopt nomatch                                 # allow [ or ] where ever you w
 
 autoload -U compinit && compinit                 # load autocompletions
 
-PATH="$HOME/bin:$PATH"                           # append to path
-export -U PATH                                   # export path var
+#-- Configure path
+#PATH="$HOME/bin:/run/current-system/sw/sbin:$PATH"
+PATH="$HOME/bin:$PATH"
+export -U PATH
 
 #}}}
 
@@ -102,9 +104,9 @@ function nix-search() { nix-env -qaP | grep -i "$1"; }
 #}}}
 
 #-------------------------------------------------------------------------------------[ Functions ]
-#{1
+#{{{1
 
-#-- Dir String {{{2
+#{{{2 Dir String
 # from http://stackoverflow.com/questions/16147173/command-prompt-directory-styling
 dir_prompt_string() {
   PROMPT_PATH=""
@@ -140,7 +142,7 @@ dir_prompt_string() {
 }
 #}}}
 
-#-- Git String {{{2
+#{{{2 Git String
 #- from https://gist.github.com/joshdick/4415470
 
 GIT_PROMPT_AHEAD="%{$fg[red]%}ANUM%{$reset_color%}"
@@ -205,18 +207,20 @@ git_prompt_string() {
 }
 #}}}
 
-#}
+#}}}
 
 #----------------------------------------------------------------------------------------[ Prompt ]
 #{{{1
 
-#-- Colors {{{2
+#{{{2 Colors
 autoload -Uz colors && colors
 autoload -Uz compinit && compinit
 export CLIICOLOR=1
 
-FGCOLOR=$'%{\e[38;2;190;95;0m%}'
-INFOCOLOR=$'%{\e[38;2;217;164;65m%}'
+FGCOLOR=$'%{\e[38;2;100;85;100m%}'
+INFOCOLOR=$'%{\e[38;2;170;170;140m%}'
+#FGCOLOR=$'%{\e[38;2;190;95;0m%}'
+#INFOCOLOR=$'%{\e[38;2;217;164;65m%}'
 
 ALERTCOLOR0="%F{107}"
 ALERTCOLOR1="%F{139}"
@@ -226,7 +230,7 @@ ALERTCOLOR3="%F{88}"
 RESETCOLOR="%{$reset_color%}"
 #}}}
 
- #-- Status Line {{{2
+#{{{2 Status Line
 START="$FGCOLOR╭─"
 MACHINE="($INFOCOLOR%M$FGCOLOR)─"
 LEFT="$FGCOLOR($INFOCOLOR"
@@ -240,3 +244,4 @@ RPROMPT=''
 #}}}
 
 #}}}
+
