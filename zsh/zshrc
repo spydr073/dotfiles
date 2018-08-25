@@ -107,6 +107,7 @@ function nix-search() { nix-env -qaP | grep -i "$1"; }
 #{{{1
 
 #{{{2 Dir String
+
 # from http://stackoverflow.com/questions/16147173/command-prompt-directory-styling
 dir_prompt_string() {
   PROMPT_PATH=""
@@ -140,9 +141,11 @@ dir_prompt_string() {
 
   echo "%{$fg_bold[cyan]%}${PROMPT_PATH}%{$reset_color%}%{$fg[red]%}%1~%{$reset_color%}"
 }
+
 #}}}
 
 #{{{2 Git String
+
 #- from https://gist.github.com/joshdick/4415470
 
 GIT_PROMPT_AHEAD="%{$fg[red]%}ANUM%{$reset_color%}"
@@ -205,6 +208,7 @@ git_prompt_string() {
     echo "×"
   fi
 }
+
 #}}}
 
 #}}}
@@ -213,14 +217,13 @@ git_prompt_string() {
 #{{{1
 
 #{{{2 Colors
+
 autoload -Uz colors && colors
 autoload -Uz compinit && compinit
 export CLIICOLOR=1
 
 FGCOLOR=$'%{\e[38;2;100;85;100m%}'
 INFOCOLOR=$'%{\e[38;2;170;170;140m%}'
-#FGCOLOR=$'%{\e[38;2;190;95;0m%}'
-#INFOCOLOR=$'%{\e[38;2;217;164;65m%}'
 
 ALERTCOLOR0="%F{107}"
 ALERTCOLOR1="%F{139}"
@@ -228,9 +231,11 @@ ALERTCOLOR2="%F{220}"
 ALERTCOLOR3="%F{88}"
 
 RESETCOLOR="%{$reset_color%}"
+
 #}}}
 
 #{{{2 Status Line
+
 START="$FGCOLOR╭─"
 MACHINE="($INFOCOLOR%M$FGCOLOR)─"
 LEFT="$FGCOLOR($INFOCOLOR"
@@ -240,7 +245,9 @@ CMDPROMT="─╼$RESETCOLOR "
 
 PROMPT=$'$START$MACHINE$LEFT$(dir_prompt_string)$RIGHT─$LEFT$(git_prompt_string)$RIGHT
 $JOBS$CMDPROMT'
+
 RPROMPT=''
+
 #}}}
 
 #}}}

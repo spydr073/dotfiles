@@ -151,8 +151,7 @@ myConfig = XMobar {
                 3
 
       , XBarCmd "DynNetwork"
-                ([ "--template" , (tag_right "net_up" "<tx> ") ++
-                                  (tag_right "net_down" "<rx> ")
+                ([ "--template" , (tag_right "net_both" "<tx> <rx> ")
                  , "--minwidth" , "4"
                  , "--Low"      , "1000000" -- units: mbits/s
                  , "--High"     , "5000000" -- units: mbits/s
@@ -160,7 +159,7 @@ myConfig = XMobar {
                 10
 
       , XBarCmd "MultiCpu"
-                ([ "--template" , tag_right_start "cpu" "<autototal> "
+                ([ "--template" , tag_right_start "cpu" "<total> "
                  , "--minwidth" , "2"
                  , "--Low"      , "50" -- units: %
                  , "--High"     , "85" -- units: %
@@ -191,7 +190,7 @@ myConfig = XMobar {
                 , "--"           -- battery specific options
                 , "-o"         , (icon "zap") ++ " <left> • <timeleft>"  -- discharge
                 , "-O"         , (icon "plug") ++ " <left> • <timeleft>" -- charge
-                , "-i"         , (icon "full_bat")                     -- full
+                , "-i"         , (icon "full_bat")                       -- full
                 ]
                 50
 
