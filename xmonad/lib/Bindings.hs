@@ -154,13 +154,15 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     -- Restart xmonad and xmobar
   , ((modMask .|. shiftMask, xK_r),
-     spawn ("pkill xmobar " ++
-            --"&& runghc -i/home/spydr/dotfiles/xmonad/lib" ++
-            --" /home/spydr/dotfiles/xmonad/info_bars/genbar.hs " ++
-            --"&& /home/spydr/dotfiles/xmonad/info_bars/genbar" ++
-            --">  /home/spydr/dotfiles/xmonad/info_bars/xmobar.conf " ++
-            "&& xmonad --recompile " ++
-            "&& xmonad --restart"))
+     spawn "/home/spydr/dotfiles/scripts/bin/reloadXMonad.sh"
+     --spawn ("pkill xmobar " ++
+     --       --"&& runghc -i/home/spydr/dotfiles/xmonad/lib" ++
+     --       --" /home/spydr/dotfiles/xmonad/info_bars/genbar.hs " ++
+     --       --"&& /home/spydr/dotfiles/xmonad/info_bars/genbar" ++
+     --       --">  /home/spydr/dotfiles/xmonad/info_bars/xmobar.conf " ++
+     --       "&& xmonad --recompile " ++
+     --       "&& xmonad --restart")
+     )
 
   --}
   ]

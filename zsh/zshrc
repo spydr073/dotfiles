@@ -76,11 +76,15 @@ function chpwd() {
 alias env-idris='nix-shell ~/dotfiles/nix/env/idris.nix'
 
 #-- launch idris with local libraries in path
-alias idris='idris -p effects -i ~/projects/idris'
+#alias idris='idris -p effects -i ~/projects/idris'
 
 alias ls='ls --color -kLNosth'
 alias reload='source ~/.zshrc; clear'
 alias pp='ps axuf | pager'
+
+alias copy='xclip -sel clip'
+alias pbcopy='xclip -selection c'
+alias pbpaste='xclip -selection clipboard -o'
 
 function chpwd() {
   emulate -L zsh
@@ -91,9 +95,6 @@ function tm() { tmux -2 -u new -s "$1" -n "$1"; }
 alias tmx='tm base'
 
 function del () { mv -f $* ~/.trash/ }
-
-alias pbcopy='xclip -selection c'
-alias pbpaste='xclip -selection clipboard -o'
 
 function psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto; }
 

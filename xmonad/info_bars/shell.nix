@@ -1,7 +1,7 @@
 with import <nixpkgs> {};
 {
-  demoEnv = stdenv.mkDerivation {
-    name = "demo-env";
+  xmobarEnv = stdenv.mkDerivation {
+    name = "xmobar-env";
     buildInputs = with pkgs.haskellPackages; [ (ghcWithPackages (p: [ p.xmonad p.xmonad-contrib ])) ];
   };
 }

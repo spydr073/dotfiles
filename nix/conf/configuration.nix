@@ -6,10 +6,12 @@
 
 let
 
-    wallpaper  = "/home/spydr/media/imgs/wallpaper/circle.jpg";
+  home = "/home/spydr";
 
-    latitude   = "37.1773";
-    longitude  = "3.59860";
+  wallpaper  = "${home}/media/imgs/wallpaper/circle.jpg";
+
+  latitude   = "37.1773";
+  longitude  = "3.59860";
 
 in  {
 
@@ -116,13 +118,6 @@ in  {
       enable = true;
     };
 
-    #wireless = {
-    #  enable                = true;
-    #  interfaces            = [ "wlp3s0" ];
-    #  userControlled.enable = true;
-    #  userControlled.group  = "wheel";
-    # };
-
     firewall = {
       enable = true;
       allowedTCPPorts = [
@@ -178,7 +173,7 @@ in  {
     };
 
     extraOptions = ''
-      binary-caches-parallel-connections = 50
+      binary-caches-parallel-connections = 255
 
       auto-optimise-store = true
       keep-outputs = true
@@ -188,25 +183,44 @@ in  {
       gc-keep-derivations = true
     '';
 
-    binaryCaches              = [ "https://cache.nixos.org" ];
-    trustedBinaryCaches       = [ "https://cache.nixos.org" ];
+    binaryCaches        = [ "https://cache.nixos.org" ];
+    trustedBinaryCaches = [ "https://cache.nixos.org" ];
 
     requireSignedBinaryCaches = false;
 
   };
 
-  nixpkgs.config = {
-    allowUnfree = true;
+  nixpkgs = {
 
-    pulseaudio = true;
-    zsh.enable = true;
-    dmenu.enableXft = true;
+    config = {
+      allowBroken = true;
+      allowUnfree = true;
 
-    packageOverrides = pkgs : {
-      #jre = pkgs.oraclejre8;
-      #jdk = pkgs.oraclejdk8;
-      #bluez = pkgs.bluez5;
+      pulseaudio = true;
+      zsh.enable = true;
+      dmenu.enableXft = true;
+
+      packageOverrides = pkgs : rec {
+        st = pkgs.callPackage ./pkgs/st {};
+      };
+
     };
+
+    overlays = [ (self: super: {
+
+      st = super.st.override {
+        conf       = builtins.readFile ./pkgs/st/config.h;
+        patches    = builtins.map super.fetchurl [
+          { url    = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.diff";
+            sha256 = "8279d347c70bc9b36f450ba15e1fd9ff62eedf49ce9258c35d7f1cfe38cca226";
+          }
+          { url    = "https://st.suckless.org/patches/alpha/st-alpha-20180616-0.8.1.diff";
+            sha256 = "da21200eef5360bf7c5e16d8847b1cc69a8fd2440f1e0f156a28a2879e9208c3";
+          }
+        ];
+      };
+
+    })];
 
   };
 
@@ -217,7 +231,7 @@ in  {
       EDITOR  = pkgs.lib.mkOverride 0 "nvim";
     };
 
-    shells = [ pkgs.zsh ];
+    shells = [ pkgs.bash pkgs.zsh ];
 
     systemPackages = with pkgs; [
       #-- System
@@ -243,7 +257,8 @@ in  {
       #-- Langs
       gcc
       haskellPackages.ghc
-      haskellPackages.idris
+      idris
+      idrisPackages.effects
       openjdk
       python
       guile
@@ -259,8 +274,6 @@ in  {
       tcpdump
       macchanger
       dnsmasq
-      #wpa_supplicant
-      #wpa_supplicant_gui
 
       #-- Bluetooth
       bluez
@@ -278,14 +291,13 @@ in  {
       gitAndTools.gitFull
       bash
       zsh
-      termite
+      st
       tmux
       neovim
 
       #-- System Utils
       xclip
       unclutter
-      compton
       redshift
       arandr
       xfontsel
@@ -296,7 +308,12 @@ in  {
       aspellDicts.en
       gnuplot
       graphviz
-      texlive.combined.scheme-full
+
+      (texlive.combine {
+        inherit (texlive) scheme-basic algorithms graphics
+                          xcolor unicode-math url hyperref;
+      })
+
       pandoc
 
       #-- CLI Programs
@@ -306,7 +323,6 @@ in  {
       tree
       python35Packages.youtube-dl
       ranger
-      dmenu2
       weechat
 
       htop
@@ -320,10 +336,13 @@ in  {
       qutebrowser
       imagemagick
       gimp
+      mupdf
       qpdfview
       mplayer
-      skype
-      slack
+      #skype
+      #slack
+      #keybase
+      #keybase-gui
 
       #-- Media
       mpd
@@ -334,6 +353,9 @@ in  {
       vlc
 
       #-- WM
+      dunst
+      dmenu2
+      compton
       haskellPackages.xmobar
       haskellPackages.xmonad
       haskellPackages.xmonad-contrib
@@ -414,7 +436,7 @@ in  {
     };
 
     cron.systemCronJobs = [
-      #"0 2 * * * root fstrim /"
+      "0 2 * * * root fstrim /"
     ];
 
     tor = {
@@ -433,9 +455,10 @@ in  {
     xserver = {
       enable = true;
       layout = "us";
+      xkbOptions = "compose:prsc";
 
       desktopManager.default = "none";
-      windowManager.default = "xmonad";
+      windowManager.default  = "xmonad";
       windowManager.xmonad = {
         enable = true;
         enableContribAndExtras = true;
@@ -448,12 +471,12 @@ in  {
         accelSpeed         = "5.0";
       };
 
-      videoDrivers = [ "intel" ];
-      #videoDrivers = [ "intel" "nvidia" ];
+      #videoDrivers = [ "intel" ];
+      videoDrivers = [ "intel" "nvidia" ];
 
       displayManager = {
 
-	slim = {
+      slim = {
           enable = true;
           defaultUser = "spydr";
           #theme = pkgs.fetchurl {
@@ -463,11 +486,20 @@ in  {
         };
 
         sessionCommands = ''
-          ${pkgs.xlibs.xset}/bin/xset r rate 200 60 # set keyboard repeat rate
-          ${pkgs.xlibs.xset}/bin/xset -b #- disable beep
-          ${pkgs.xlibs.xset}/bin/xset s off -dpms #- disable screen poweroff
-          ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name crosshair -fg gray -bg black &
-          ${pkgs.feh}/bin/feh --bg-scale --no-fehbg ${wallpaper}
+          #- set keyboard repeat rate
+          ${pkgs.xlibs.xset}/bin/xset r rate 200 60
+
+          #- disable beep
+          ${pkgs.xlibs.xset}/bin/xset -b
+
+          #- disable screen poweroff
+          ${pkgs.xlibs.xset}/bin/xset s off -dpms
+
+          #- set cursor style
+          ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name crosshair -fg gray -bg black
+
+          #- set wallpaper
+          ${pkgs.feh}/bin/feh --bg-scale --no-fehbg ${wallpaper} &
         '';
 
       };
@@ -489,9 +521,7 @@ in  {
        before      = [ "network-pre.target" ];
        bindsTo     = [ "sys-subsystem-net-devices-enp2s0.device" ];
        after       = [ "sys-subsystem-net-devices-enp2s0.device" ];
-       script = ''
-           ${pkgs.macchanger}/bin/macchanger -e enp2s0
-       '';
+       script = "${pkgs.macchanger}/bin/macchanger -e enp2s0";
        serviceConfig.Type = "oneshot";
     };
 
@@ -503,9 +533,7 @@ in  {
        before      = [ "network-pre.target" ];
        bindsTo     = [ "sys-subsystem-net-devices-wlp3s0.device" ];
        after       = [ "sys-subsystem-net-devices-wlp3s0.device" ];
-       script = ''
-           ${pkgs.macchanger}/bin/macchanger -e wlp3s0
-       '';
+       script = "${pkgs.macchanger}/bin/macchanger -e wlp3s0";
        serviceConfig.Type = "oneshot";
     };
 
@@ -527,15 +555,11 @@ in  {
        serviceConfig.Restart = "always";
        serviceConfig.RestartSec = 2;
        serviceConfig.ExecStart = ''
-        ${pkgs.compton}/bin/compton -b --config /home/spydr/dotfiles/compton/compton.conf
+        ${pkgs.compton}/bin/compton -b --config ${home}/dotfiles/compton/compton.conf
        '';
     };
 
   };
-
-  #-- Enable custom systemd services
-  systemd.services.macchanger-wired.enable    = true;
-  systemd.services.macchanger-wireless.enable = true;
 
 #}
 
