@@ -308,13 +308,12 @@ in  {
       aspellDicts.en
       gnuplot
       graphviz
-
+      pandoc
       (texlive.combine {
         inherit (texlive) scheme-basic algorithms graphics
                           xcolor unicode-math url hyperref;
       })
 
-      pandoc
 
       #-- CLI Programs
       links
@@ -353,7 +352,7 @@ in  {
       vlc
 
       #-- WM
-      dunst
+      dunst libnotify
       dmenu2
       compton
       haskellPackages.xmobar
@@ -557,6 +556,15 @@ in  {
        serviceConfig.ExecStart = ''
         ${pkgs.compton}/bin/compton -b --config ${home}/dotfiles/compton/compton.conf
        '';
+    };
+
+    "dunst" = {
+       enable = true;
+       description = "";
+       wantedBy = [ "default.target" ];
+       serviceConfig.Restart = "always";
+       serviceConfig.RestartSec = 2;
+       serviceConfig.ExecStart = "${pkgs.dunst}/bin/dunst";
     };
 
   };
