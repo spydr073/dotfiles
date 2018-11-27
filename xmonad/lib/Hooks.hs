@@ -60,13 +60,13 @@ myLogHook h = dynamicLogWithPP $ def
   --, ppUrgent          = xmobarColor mybgColor mybgColor_urgent
 
   , ppCurrent         = xmobarColor myfgColor_current mybgColor_bar .
-                          (\ _ -> wrapIcon "dot_full_16.xbm")
+                          (\ _ -> wrapIcon "dot_full.xbm")
   , ppHidden          = xmobarColor myfgColor_hidden mybgColor_bar .
-                          (\ _ -> wrapIcon "dot_half_16.xbm")
+                          (\ _ -> wrapIcon "dot_half.xbm")
   , ppVisible         = xmobarColor myfgColor_visible mybgColor_bar .
-                          (\ _ -> wrapIcon "dot_center_16.xbm")
+                          (\ _ -> wrapIcon "dot_center.xbm")
   , ppHiddenNoWindows = xmobarColor myfgColor_noWindows mybgColor_bar .
-                          (\ _ -> wrapIcon "dot_empty_16.xbm")
+                          (\ _ -> wrapIcon "dot_empty.xbm")
 
 
   , ppLayout          = xmobarColor myfgColor mybgColor_bar .
@@ -74,7 +74,7 @@ myLogHook h = dynamicLogWithPP $ def
                             case s of
                                  "Default"  -> makeTag $ wrapIcon "layout_tall.xbm"
                                  "Full"     -> makeTag $ wrapIcon "layout_full.xbm"
-                                 "Float"    -> makeTag $ wrapIcon "mouse.xbm"
+                                 "Float"    -> makeTag $ wrapIcon "layout_mouse.xbm"
                                  "Gimp"     -> makeTag $ "[G]"
                                  _          -> makeTag $ "[?]"
                           )

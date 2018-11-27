@@ -35,6 +35,7 @@ module MyXMobarConfig
 
 import XMobarUtils
 import Themes
+import Settings
 
 --}
 
@@ -100,11 +101,11 @@ tag_right_end =
 --{1
 
 myConfig = XMobar {
-    font             = "xft:Anonymous Pro:size=10:bold:antialias=true"
+    font             = "xft:Droid Sans Mono for Powerline:size=8:bold:antialias=true"
   , additionalFonts  = []
   , iconOffset       = -1
   , textOffset       = -1
-  , iconRoot         = "/home/spydr/dotfiles/xmonad/info_bars/xbm/"
+  , iconRoot         = myIconDir
   , pickBroadest     = True
 
   , fgColor          = myfgColor_bar

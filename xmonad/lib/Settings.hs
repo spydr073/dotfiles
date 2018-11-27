@@ -32,7 +32,7 @@ import Foreign.C.Types
 username  = "spydr"
 myHomeDir = "/home/" ++ username ++ "/"
 myScripts = myHomeDir ++ "dotfiles/xmonad/scripts/"
-myIconDir = myHomeDir ++ "dotfiles/xmonad/info_bars/xbm/"
+myIconDir = myHomeDir ++ "dotfiles/xmonad/icons/xbm_16/"
 
 --}
 

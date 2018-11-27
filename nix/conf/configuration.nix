@@ -6,12 +6,16 @@
 
 let
 
-  home = "/home/spydr";
+  version = "18.03";
+  home    = "/home/spydr";
 
   wallpaper  = "${home}/media/imgs/wallpaper/circle.jpg";
 
   latitude   = "37.1773";
   longitude  = "3.59860";
+
+  #dpi = 142;
+  dpi = 100;
 
 in  {
 
@@ -26,9 +30,9 @@ in  {
     ];
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "18.03";
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = https://nixos.org/channels/nixos-18.03;
+  system.stateVersion        = "${version}";
+  system.autoUpgrade.enable  = true;
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-${version}";
 
   boot = {
     initrd = {
@@ -42,6 +46,7 @@ in  {
     };
 
     cleanTmpDir = true;
+    tmpOnTmpfs  = true;
 
     loader = {
       grub = {
@@ -416,6 +421,8 @@ in  {
       HandlePowerKey=suspend
     ";
 
+    fstrim.enable = true;
+
     journald = {
       extraConfig = ''
         SystemMaxUse=50M
@@ -434,9 +441,9 @@ in  {
       permitRootLogin = "no";
     };
 
-    cron.systemCronJobs = [
-      "0 2 * * * root fstrim /"
-    ];
+    # cron.systemCronJobs = [
+    #   "0 2 * * * root fstrim /"
+    # ];
 
     tor = {
       enable        = true;  #- for port 9050
@@ -451,10 +458,31 @@ in  {
         longitude         = "${longitude}";
     };
 
+    compton = {
+       enable       = true;
+       backend      = "glx";
+       vSync        = "opengl-swc";
+       fade         = false;
+       shadow       = false;
+       menuOpacity  = "0.80";
+       opacityRules = [ "70:class_g = 'st-256color'" ];
+       extraOptions = ''
+         blur-background = true;
+         blur-background-frame = true;
+         blur-background-fixed = false;
+         blur-background-exclude = [
+             "window_type = 'dock'",
+             "window_type = 'desktop'",
+             "_GTK_FRAME_EXTENTS@:c"
+         ];
+       '';
+    };
+
     xserver = {
       enable = true;
       layout = "us";
       xkbOptions = "compose:prsc";
+      dpi = dpi;
 
       desktopManager.default = "none";
       windowManager.default  = "xmonad";
@@ -545,18 +573,18 @@ in  {
        serviceConfig.ExecStart = "${pkgs.unclutter}/bin/unclutter";
     };
 
-    "compton" = {
-       enable = true;
-       description = "add effects to xorg";
-       wantedBy = [ "default.target" ];
-       path = [ pkgs.compton ];
-       serviceConfig.Type = "forking";
-       serviceConfig.Restart = "always";
-       serviceConfig.RestartSec = 2;
-       serviceConfig.ExecStart = ''
-        ${pkgs.compton}/bin/compton -b --config ${home}/dotfiles/compton/compton.conf
-       '';
-    };
+    # "compton" = {
+    #    enable = true;
+    #    description = "add effects to xorg";
+    #    wantedBy = [ "default.target" ];
+    #    path = [ pkgs.compton ];
+    #    serviceConfig.Type = "forking";
+    #    serviceConfig.Restart = "always";
+    #    serviceConfig.RestartSec = 2;
+    #    serviceConfig.ExecStart = ''
+    #     ${pkgs.compton}/bin/compton -b --config ${home}/dotfiles/compton/compton.conf
+    #    '';
+    # };
 
     "dunst" = {
        enable = true;
@@ -576,8 +604,13 @@ in  {
 
   fonts = {
     enableFontDir = true;
-    fontconfig.enable = true;
     enableGhostscriptFonts = true;
+
+    fontconfig = {
+      enable = true;
+      dpi = dpi;
+    };
+
     fonts = with pkgs; [
       corefonts
       dejavu_fonts
