@@ -9,12 +9,11 @@ let
   version = "18.03";
   home    = "/home/spydr";
 
-  wallpaper  = "${home}/media/imgs/wallpaper/circle.jpg";
+  wallpaper  = "${home}/dotfiles/xmonad/wallpaper/circle.jpg";
 
   latitude   = "37.1773";
   longitude  = "3.59860";
 
-  #dpi = 142;
   dpi = 100;
 
 in  {
@@ -312,11 +311,16 @@ in  {
       aspell
       aspellDicts.en
       gnuplot
+      asymptote
       graphviz
       pandoc
       (texlive.combine {
         inherit (texlive) scheme-basic algorithms graphics
-                          xcolor unicode-math url hyperref;
+                          xcolor unicode-math url hyperref
+                          beamer etoolbox mdframed
+                          needspace booktabs caption
+                          listings tabulary
+                          collection-fontsrecommended;
       })
 
 

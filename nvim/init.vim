@@ -152,8 +152,7 @@ function! Section(commentChar)
 endfunc
 
 function! Header(commentChar,preamble)
-  let lines = [ (a:commentChar . repeat("-", 89 - strlen(a:commentChar)) . "[ Module ]"),
-              \ (a:commentChar . "\{1"),
+  let lines = [ (a:commentChar . "\{1"),
               \ (a:commentChar . repeat(" ", 80 - strlen(a:commentChar)) .  "(\\_/)"),
               \ (a:commentChar . repeat(" ", 80 - strlen(a:commentChar)) .  "(o.O)"),
               \ (a:commentChar . repeat(" ", 80 - strlen(a:commentChar)) . "(> <)"),
@@ -161,7 +160,8 @@ function! Header(commentChar,preamble)
               \ (a:commentChar . repeat(" ", 77 - strlen(a:commentChar)) . "KILLER BUNNY"),
               \ (a:commentChar . repeat(" ", 79 - strlen(a:commentChar)) . "APPROVED"),
               \ "" ] + a:preamble + [ "", a:commentChar . "\}", "" ]
-  call append(line('$'), lines)
+  call setline('.', a:commentChar . repeat("-", 89 - strlen(a:commentChar)) . "[ Module ]")
+  call append(line('.'), lines)
 endfunc
 
 function! FoldText()
@@ -519,10 +519,13 @@ if has("autocmd")
     setlocal foldmarker=--{,--}
     nnoremap <buffer> <Leader>h :call Section("--")<CR>
     nnoremap <buffer> <Leader>H :call Header("--",
-      \ [ "module",
+      \ [ "module " . getline('.'),
       \   "",
       \   "%default total",
       \   "%access private",
+      \   "",
+      \   "%flag C \"-O3\"",
+      \   "%flag C \"-g\"",
       \ ])<CR>
 
   endfunction
@@ -661,21 +664,84 @@ if has("autocmd")
   augroup END
 
   function! InitDoc()
-    let header = [ "\documentclass[12pt]{article}"
-               \ , "\begin{document}"
+    let header = [ "\\documentclass[12pt]{article}"
+               \ , "\\usepackage{amsmath, amssymb, graphicx}"
+               \ , "\\begin{document}"
                \ ]
-    let footer = [ "\end{document}" ]
+    let footer = [ "\\end{document}" ]
     call append(line('^'), header)
     call append(line('$'), footer)
   endfunction
 
-  function! InitSlide()
-    let header = [ "\documentclass[12pt]{article}"
-               \ , "\begin{document}"
+  function! InitSlides()
+    let header = [ ""
+               \ , "%{1 Prelude"
+               \ , "\\documentclass[12pt]{beamer}"
+               \ , "\\usetheme{Boadilla}"
+               \ , "\\usepackage{amsmath, amssymb, graphicx}"
+               \ , ""
+               \ , "\\title{}"
+               \ , "\\subtitle{}"
+               \ , "\\author{}"
+               \ , "\\institute{}"
+               \ , "\\date{\\today}"
+               \ , ""
+               \ , "\\begin{document}"
+               \ , ""
+               \ , "\\begin{frame}"
+               \ , "\\titlepage"
+               \ , "\\end{frame}"
+               \ , ""
+               \ , "%}"
+               \ , ""
                \ ]
-    let footer = [ "\end{document}" ]
+    let footer = [ "%{1 EOF", "", "\\end{document}", "", "%}", "" ]
     call append(line('^'), header)
     call append(line('$'), footer)
+
+  endfunction
+
+  function! Slide()
+    let s = [ "%{1 "
+          \ , "\\begin{frame}\\frametitle{}"
+          \ , ""
+          \ , ""
+          \ , ""
+          \ , "\\end{frame}"
+          \ , "%}"
+          \ , ""
+          \ ]
+    call append(line('.'), s)
+  endfunction
+
+  function! LI()
+    let li = [ "\\begin{enumerate}"
+           \ , ""
+           \ , "\\item "
+           \ , ""
+           \ , "\\end{enumerate}"
+           \ ]
+    call append(line('.'), li)
+  endfunction
+
+  function! UL()
+    let li = [ "\\begin{itemize}"
+           \ , ""
+           \ , "\\item "
+           \ , ""
+           \ , "\\end{itemize}"
+           \ ]
+    call append(line('.'), li)
+  endfunction
+
+  function! GR()
+    let gr = [ "\\begin{figure}[ht!]"
+           \ , "\\centering"
+           \ , "\\includegraphics[width=100mm]{}"
+           \ , "\\label{fig:}"
+           \ , "\\end{figure}"
+           \ ]
+    call append(line('.'), gr)
   endfunction
 
   function! SetLatexOpts()
@@ -704,6 +770,13 @@ if has("autocmd")
     nnoremap <buffer> <Leader>h :call Section("%")<CR>
     nnoremap <leader>m ;w<CR>;silent !latexmk -quiet -pv "%"; latexmk -c "%"<CR><CR>;redraw!<CR>
     nnoremap == vipgq
+
+    nnoremap <buffer> <Leader>D  :call InitDoc()<CR>
+    nnoremap <buffer> <Leader>S  :call InitSlides()<CR>
+    nnoremap <buffer> <Leader>s  :call Slide()<CR>
+    nnoremap <buffer> <Leader>g  :call GR()<CR>
+    nnoremap <buffer> <Leader>ul :call UL()<CR>
+    nnoremap <buffer> <Leader>li :call LI()<CR>
 
   endfunction
   "--}
