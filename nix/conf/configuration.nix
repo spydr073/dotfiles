@@ -6,15 +6,22 @@
 
 let
 
-  version = "18.03";
+  version = "18.09";
   home    = "/home/spydr";
+  dotfiles = "${home}/dotfiles";
 
-  wallpaper  = "${home}/dotfiles/xmonad/wallpaper/circle.jpg";
+  wallpaper  = "${dotfiles}/xmonad/wallpaper/circle.jpg";
 
   latitude   = "37.1773";
   longitude  = "3.59860";
 
   dpi = 100;
+
+  pollBattery = pkgs.writeScript "pollBattery" ''
+      BAT_PCT=`${pkgs.acpi}/bin/acpi -b | ${pkgs.gnugrep}/bin/grep -P -o '[0-9]+(?=%)'`
+      BAT_STA=`${pkgs.acpi}/bin/acpi -b | ${pkgs.gnugrep}/bin/grep -P -o '\w+(?=,)'`
+      test $BAT_PCT -le 20 && test $BAT_STA = "Discharging" && DISPLAY=:0.0 ${pkgs.libnotify}/bin/notify-send -u critical 'Low Battery'
+  '';
 
 in  {
 
@@ -37,7 +44,8 @@ in  {
     initrd = {
       luks.devices = [
         { name = "root";
-          device = "/dev/sda2";
+          #device = "/dev/sda2";
+          device = "/dev/nvme0n1p2";
           allowDiscards = true;
           preLVM = true;
         }
@@ -205,15 +213,19 @@ in  {
       dmenu.enableXft = true;
 
       packageOverrides = pkgs : rec {
-        st = pkgs.callPackage ./pkgs/st {};
+        st            = pkgs.callPackage "${dotfiles}/nix/conf/pkgs/st" {};
       };
 
     };
 
     overlays = [ (self: super: {
 
+     idrisPackages = super.idisPackages.override {
+       aatree = pkgs.idrisPackages.callPackage /home/spydr/idrisDev/AA-Tree/aatree.nix {};
+     };
+
       st = super.st.override {
-        conf       = builtins.readFile ./pkgs/st/config.h;
+        conf       = builtins.readFile "${dotfiles}/nix/conf/pkgs/st/config.h";
         patches    = builtins.map super.fetchurl [
           { url    = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.diff";
             sha256 = "8279d347c70bc9b36f450ba15e1fd9ff62eedf49ce9258c35d7f1cfe38cca226";
@@ -263,6 +275,7 @@ in  {
       haskellPackages.ghc
       idris
       idrisPackages.effects
+      idrisPackages.aatree
       openjdk
       python
       guile
@@ -278,6 +291,7 @@ in  {
       tcpdump
       macchanger
       dnsmasq
+      dnsutils
 
       #-- Bluetooth
       bluez
@@ -319,7 +333,8 @@ in  {
                           xcolor unicode-math url hyperref
                           beamer etoolbox mdframed
                           needspace booktabs caption
-                          listings tabulary
+                          listings tabulary setspace
+                          translator fancyvrb
                           collection-fontsrecommended;
       })
 
@@ -338,7 +353,7 @@ in  {
       tree
 
       #-- GUI Programs
-      google-chrome
+      #google-chrome
       firefox
       tor-browser-bundle-bin
       qutebrowser
@@ -388,6 +403,7 @@ in  {
     createHome      = true;
     home            = "/home/spydr";
     extraGroups     = [ "wheel"
+                        "networkmanager"
                         "disk"
                         "audio"
                         "video"
@@ -418,22 +434,20 @@ in  {
 
   services = {
 
+    dbus.enable   = true;
     acpid.enable  = true;
     upower.enable = true;
+    fstrim.enable = true;
 
     logind.extraConfig = "
       HandlePowerKey=suspend
     ";
-
-    fstrim.enable = true;
 
     journald = {
       extraConfig = ''
         SystemMaxUse=50M
       '';
     };
-
-    dbus.enable = true;
 
     printing = {
         enable  = true;
@@ -445,9 +459,13 @@ in  {
       permitRootLogin = "no";
     };
 
-    # cron.systemCronJobs = [
-    #   "0 2 * * * root fstrim /"
-    # ];
+    cron = {
+      enable = true;
+      systemCronJobs = [
+         "* * * * *   spydr  ${pollBattery}"
+         "@weekly     root   nix-collect-garbage"
+      ];
+    };
 
     tor = {
       enable        = true;  #- for port 9050
@@ -468,8 +486,8 @@ in  {
        vSync        = "opengl-swc";
        fade         = false;
        shadow       = false;
-       menuOpacity  = "0.80";
-       opacityRules = [ "70:class_g = 'st-256color'" ];
+       menuOpacity  = "1.0";
+       opacityRules = [ "90:class_g = 'st-256color'" ];
        extraOptions = ''
          blur-background = true;
          blur-background-frame = true;
@@ -502,18 +520,18 @@ in  {
         accelSpeed         = "5.0";
       };
 
-      #videoDrivers = [ "intel" ];
-      videoDrivers = [ "intel" "nvidia" ];
+      videoDrivers = [ "intel" ];
+      #videoDrivers = [ "intel" "nvidia" ];
 
       displayManager = {
 
-      slim = {
-          enable = true;
-          defaultUser = "spydr";
-          #theme = pkgs.fetchurl {
-          #  url = "https://github.com/edwtjo/nixos-black-theme/archive/v1.0.tar.gz";
-          #  sha256 = "13bm7k3p6k7yq47nba08bn48cfv536k4ipnwwp1q1l2ydlp85r9d";
-          # };
+        slim = {
+            enable = true;
+            defaultUser = "spydr";
+            #theme = pkgs.fetchurl {
+            #  url = "https://github.com/edwtjo/nixos-black-theme/archive/v1.0.tar.gz";
+            #  sha256 = "13bm7k3p6k7yq47nba08bn48cfv536k4ipnwwp1q1l2ydlp85r9d";
+            # };
         };
 
         sessionCommands = ''
@@ -576,19 +594,6 @@ in  {
        serviceConfig.RestartSec = 2;
        serviceConfig.ExecStart = "${pkgs.unclutter}/bin/unclutter";
     };
-
-    # "compton" = {
-    #    enable = true;
-    #    description = "add effects to xorg";
-    #    wantedBy = [ "default.target" ];
-    #    path = [ pkgs.compton ];
-    #    serviceConfig.Type = "forking";
-    #    serviceConfig.Restart = "always";
-    #    serviceConfig.RestartSec = 2;
-    #    serviceConfig.ExecStart = ''
-    #     ${pkgs.compton}/bin/compton -b --config ${home}/dotfiles/compton/compton.conf
-    #    '';
-    # };
 
     "dunst" = {
        enable = true;

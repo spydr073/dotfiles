@@ -82,6 +82,8 @@ alias ls='ls --color -kLNosth'
 alias reload='source ~/.zshrc; clear'
 alias pp='ps axuf | pager'
 
+function stfs() { st -f "Source Code Pro for Powerline:pixelsize=$1"; }
+
 alias copy='xclip -sel clip'
 alias pbcopy='xclip -selection c'
 alias pbpaste='xclip -selection clipboard -o'

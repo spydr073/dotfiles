@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/sh
 
 WLAN=$(ifconfig wlp5s0 | grep 'inet ' | awk '{print $2}')
 ETH0=$(ifconfig enp3s0 | grep 'inet ' | awk '{print $2}')

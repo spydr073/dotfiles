@@ -45,10 +45,6 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask .|. controlMask .|. shiftMask, xK_S),
      spawn myScreenshot)
 
-    -- Mute volume.
-  , ((0, 0x1008ff12),
-     spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh mute")
-
     -- Decrease volume.
   , ((0, 0x1008ff11),
      spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh decrease")
@@ -57,27 +53,11 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0, 0x1008ff13),
      spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh increase")
 
-    -- Audio previous.
-  , ((0, 0x1008FF16),
-     spawn "")
-
-    -- Play/pause.
-  , ((0, 0x1008FF14),
-     spawn "")
-
-    -- Audio next.
-  , ((0, 0x1008FF17),
-     spawn "")
-
-    -- Eject CD tray.
-  , ((0, 0x1008FF2C),
-     spawn "eject -T")
-
     -- Adjust screen brightness
-  , ((0, 0x1008ff02),
-     spawn "/home/spydr/.xmonad/scripts/increase-backlight.sh")
-  , ((0, 0x1008ff03),
-     spawn "/home/spydr/.xmonad/scripts/decrease-backlight.sh")
+  , ((0, 0x1008ff15),
+     spawn "/home/spydr/dotfiles/xmonad/scripts/increase-backlight.sh")
+  , ((0, 0x1008ff16),
+     spawn "/home/spydr/dotfiles/xmonad/scripts/decrease-backlight.sh")
 
   --}
 
@@ -154,15 +134,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     -- Restart xmonad and xmobar
   , ((modMask .|. shiftMask, xK_r),
-     spawn "/home/spydr/dotfiles/scripts/bin/reloadXMonad.sh"
-     --spawn ("pkill xmobar " ++
-     --       --"&& runghc -i/home/spydr/dotfiles/xmonad/lib" ++
-     --       --" /home/spydr/dotfiles/xmonad/info_bars/genbar.hs " ++
-     --       --"&& /home/spydr/dotfiles/xmonad/info_bars/genbar" ++
-     --       --">  /home/spydr/dotfiles/xmonad/info_bars/xmobar.conf " ++
-     --       "&& xmonad --recompile " ++
-     --       "&& xmonad --restart")
-     )
+     spawn "/home/spydr/dotfiles/scripts/bin/reloadXMonad.sh")
 
   --}
   ]

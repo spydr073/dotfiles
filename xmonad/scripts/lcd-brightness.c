@@ -1,8 +1,15 @@
 /*
  * Change/query the brightness of LCD screen.
+ *
+ * Be sure to update the group and permissions for the backlight file.
+ *
+ *   > sudo chown root:video /sys/class/backlight/intel_backlight/brightness
+ *   > sudo chmod 764 /sys/class/backlight/intell_backlight/brightness
+ *
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 void usage()
 {

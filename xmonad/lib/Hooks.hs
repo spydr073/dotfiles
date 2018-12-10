@@ -116,7 +116,7 @@ myManageHook =
     urgent = [ ]
 
     -- Programs that spawn floated
-    floatClasses = [ "Xmessage", "Eclipse", "Thunar", "Electron", "Arandr", "Pavucontrol" ]
+    floatClasses = [ "Xmessage", "Arandr", "Pavucontrol" , "MuPDF" ]
     floatTitles  = []
 
     -- Programs that spawn within a given workspace
