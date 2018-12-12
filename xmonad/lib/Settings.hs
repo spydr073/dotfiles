@@ -57,11 +57,10 @@ myWorkspaces = map show [1..8 :: Int]
 --{1
 
 myTerminal :: String
---myTerminal = "/run/current-system/sw/bin/termite"
 myTerminal = "/run/current-system/sw/bin/st"
 
 myLockScreen:: String
-myLockScreen = "/run/current-system/sw/bin/slimlock"
+myLockScreen = myHomeDir ++ "dotfiles/scripts/bin/lock.sh"
 
 myScreenshot :: String
 myScreenshot = "scrot"

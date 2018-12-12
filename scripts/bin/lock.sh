@@ -1,10 +1,20 @@
-#!/run/current-system/sw/bin/bash
-slimlock
+#!/bin/sh
 
-#-- try 1
-#sleep 1; xset dpms force off && slock
+pkill -u $USER -USR1 dunst
+i3lock-color -n -i $HOME/dotfiles/xmonad/wallpaper/circle_blur.png \
+    --insidecolor=373445ff      \
+    --ringcolor=ffffffff        \
+    --line-uses-inside          \
+    --keyhlcolor=d23c3dff       \
+    --bshlcolor=d23c3dff        \
+    --separatorcolor=00000000   \
+    --insidevercolor=fecf4dff   \
+    --insidewrongcolor=d23c3dff \
+    --ringvercolor=ffffffff     \
+    --ringwrongcolor=ffffffff   \
+    --indpos="x+86:y+1003"      \
+    --radius=15 --veriftext=""  \
+    --wrongtext=""
+pkill -u $USER -USR2 dunst
 
-#-- try 2
-#( slock && xset dpms 0 0 60 ) &
-#xset dpms 0 0 2
-#xset dpms force off
+

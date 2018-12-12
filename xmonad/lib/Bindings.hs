@@ -45,19 +45,17 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask .|. controlMask .|. shiftMask, xK_S),
      spawn myScreenshot)
 
-    -- Decrease volume.
+    -- Adjust volume level.
   , ((0, 0x1008ff11),
      spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh decrease")
-
-    -- Increase volume.
   , ((0, 0x1008ff13),
      spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh increase")
 
     -- Adjust screen brightness
-  , ((0, 0x1008ff15),
-     spawn "/home/spydr/dotfiles/xmonad/scripts/increase-backlight.sh")
-  , ((0, 0x1008ff16),
-     spawn "/home/spydr/dotfiles/xmonad/scripts/decrease-backlight.sh")
+  , ((0, 0x1008ff02),
+     spawn "light -A 10")
+  , ((0, 0x1008ff03),
+     spawn "light -U 10")
 
   --}
 

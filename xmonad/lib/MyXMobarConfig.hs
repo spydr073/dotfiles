@@ -113,7 +113,7 @@ myConfig = XMobar {
   , borderColor      = myBorderColor_bar
   , borderWidth      = 4
 
-  , position         = "TopSize L 100 28"
+  , position         = "TopSize L 100 26"
   , border           = "BottomB"
   , alpha            = 255
 

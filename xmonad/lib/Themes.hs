@@ -69,7 +69,7 @@ mybgColor_bar        = "#282c32"
 
 myfgTagColor         = mybgColor_bar
 mybgTagColor         = "#000000"
-myBorderColor_bar    = "#152427"
+myBorderColor_bar    = "#000000" --"#152427"
 
 --myfgLowColor_bar     = "#4a5d23"
 --myfgMedColor_bar     = "#b8860b"

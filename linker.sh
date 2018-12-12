@@ -35,4 +35,5 @@ ln -sv "$DOTFILES/nvim" "$HOME/.config/nvim"
 #-- Link Dust Filess
 ln -sv "$DOTFILES/dunst" "$HOME/.config/dunst"
 
-
+#-- Link Zathura Filess
+ln -sv "$DOTFILES/zathura" "$HOME/.config/zathura"

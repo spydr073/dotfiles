@@ -95,8 +95,7 @@ in  {
     enableAllFirmware = true;
     cpu.intel.updateMicrocode = true;
 
-    #-- for scanners
-    sane.enable = true;
+    sane.enable          = true;
 
     opengl = {
       driSupport32Bit = true;
@@ -213,16 +212,16 @@ in  {
       dmenu.enableXft = true;
 
       packageOverrides = pkgs : rec {
-        st            = pkgs.callPackage "${dotfiles}/nix/conf/pkgs/st" {};
+        st = pkgs.callPackage "${dotfiles}/nix/conf/pkgs/st" {};
       };
 
     };
 
     overlays = [ (self: super: {
 
-     idrisPackages = super.idisPackages.override {
-       aatree = pkgs.idrisPackages.callPackage /home/spydr/idrisDev/AA-Tree/aatree.nix {};
-     };
+     #idrisPackages = super.idisPackages.override {
+     #  aatree = pkgs.idrisPackages.callPackage /home/spydr/idrisDev/AA-Tree/aatree.nix {};
+     # };
 
       st = super.st.override {
         conf       = builtins.readFile "${dotfiles}/nix/conf/pkgs/st/config.h";
@@ -275,7 +274,6 @@ in  {
       haskellPackages.ghc
       idris
       idrisPackages.effects
-      idrisPackages.aatree
       openjdk
       python
       guile
@@ -359,8 +357,9 @@ in  {
       qutebrowser
       imagemagick
       gimp
-      mupdf
-      qpdfview
+      #mupdf
+      #qpdfview
+      zathura
       mplayer
       #skype
       #slack
@@ -425,6 +424,8 @@ in  {
 
     zsh.enableCompletion  = true;
     bash.enableCompletion = true;
+
+    light.enable = true;
   };
 
   security = {
@@ -436,6 +437,7 @@ in  {
 
     dbus.enable   = true;
     acpid.enable  = true;
+    tlp.enable    = true;
     upower.enable = true;
     fstrim.enable = true;
 
@@ -487,7 +489,9 @@ in  {
        fade         = false;
        shadow       = false;
        menuOpacity  = "1.0";
-       opacityRules = [ "90:class_g = 'st-256color'" ];
+       opacityRules = [ "90:class_g = 'st-256color'"
+                        "80:class_g = 'dmenu_run'"
+                      ];
        extraOptions = ''
          blur-background = true;
          blur-background-frame = true;
@@ -498,6 +502,14 @@ in  {
              "_GTK_FRAME_EXTENTS@:c"
          ];
        '';
+    };
+
+    actkbd = {
+      enable = true;
+      bindings = [
+        { keys = [ 232 ]; events = [ "key" ]; command = "/run/wrappers/bin/light -A 10"; }
+        { keys = [ 233 ]; events = [ "key" ]; command = "/run/wrappers/bin/light -U 10"; }
+      ];
     };
 
     xserver = {
@@ -528,10 +540,6 @@ in  {
         slim = {
             enable = true;
             defaultUser = "spydr";
-            #theme = pkgs.fetchurl {
-            #  url = "https://github.com/edwtjo/nixos-black-theme/archive/v1.0.tar.gz";
-            #  sha256 = "13bm7k3p6k7yq47nba08bn48cfv536k4ipnwwp1q1l2ydlp85r9d";
-            # };
         };
 
         sessionCommands = ''
