@@ -13,6 +13,8 @@ import System.IO
 
 import XMonad
 
+import qualified XMonad.StackSet as W
+
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
@@ -107,7 +109,7 @@ myManageHook =
 
   , [ title        =? x --> doCenterFloat'  | x <- urgent           ]
   , [ isDialog          --> doCenterFloat'                          ]
-
+  , [ className =? ".zathura-wrapped_" --> doRectFloat (W.RationalRect 0.5 0.03 0.5 0.95) ]
   , [ isFullscreen      --> doFullFloat'                            ]
   --, [ return True       --> doMaster                                ]
   ])
@@ -116,7 +118,7 @@ myManageHook =
     urgent = [ ]
 
     -- Programs that spawn floated
-    floatClasses = [ "Xmessage", "Arandr", "Pavucontrol" , "MuPDF" , "Xev"]
+    floatClasses = [ "Xmessage", "Arandr", "Pavucontrol" , "Zathura" , "Xev", "feh" ]
     floatTitles  = []
 
     -- Programs that spawn within a given workspace

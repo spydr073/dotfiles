@@ -1,0 +1,12 @@
+#! /usr/bin/env zsh
+
+BASEDIR="$HOME/dissertation"
+
+tmux new-window   -n "thesis"
+tmux send-keys    "cd $BASEDIR" C-m
+tmux split-window -h -c "#{pane_current_path}"
+tmux send-keys    "cd $BASEDIR" C-m
+tmux resize-pane  -L 12
+tmux select-pane  -t 0
+
+

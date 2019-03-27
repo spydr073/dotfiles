@@ -1,5 +1,9 @@
 #!/bin/sh
 
+BARBG=$1
+TAGBG=$2
+TAGFG=$3
+
 WLAN=$(ifconfig wlp5s0 | grep 'inet ' | awk '{print $2}')
 ETH0=$(ifconfig enp3s0 | grep 'inet ' | awk '{print $2}')
 PUB_IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
@@ -14,5 +18,20 @@ elif [[ "$ETH0" != "" ]]; then
 	LOC_IP="$ETH0"
 fi
 
-echo "#[fg=#777777,bg=#222222] ${MAC} #[default] #[fg=#777777,bg=#222222] ${WLAN} #[default] #[fg=#777777,bg=#222222] ${PUB_IP} #[default]"
+MACSTR="#[fg=${TAGBG}]#[bg=${BARBG}]\
+#[fg=${TAGFG}]#[bg=${TAGBG}] ${MAC} \
+#[fg=${BARBG}]#[bg=${TAGBG}]\
+#[default]"
+
+LOCSTR="#[fg=${TAGBG}]#[bg=${BARBG}]\
+#[fg=${TAGFG}]#[bg=${TAGBG}] ${LOC_IP} \
+#[fg=${BARBG}]#[bg=${TAGBG}]\
+#[default]"
+
+IPSTR="#[fg=${TAGBG}]#[bg=${BARBG}]\
+#[fg=${TAGFG}]#[bg=${TAGBG}] ${PUB_IP} \
+#[default]"
+
+# 
+echo "${MACSTR}${LOCSTR}${IPSTR}"
 

@@ -17,8 +17,6 @@ set scroll-step 100
 set zoom-min 10
 set guioptions ""
 
-# zathurarc-dark
-
 set font "inconsolata 15"
 set default-bg "#000000" #00
 set default-fg "#F7F7F6" #01
@@ -48,14 +46,41 @@ set notification-bg "#90A959" #0B
 set notification-fg "#151515" #00
 
 set recolor "true"
-set recolor-lightcolor "#000000" #00
-set recolor-darkcolor "#E0E0E0" #06
-set recolor-reverse-video "true"
 set recolor-keephue "true"
+set recolor-reverse-video "true"
+
+# -- Alt Theme 1
+#set recolor-lightcolor "#000000" #00
+#set recolor-darkcolor "#E0E0E0" #06
+
+#-- Alt Theme 2
+set recolor-lightcolor "#0a0a12"
+set recolor-darkcolor "#ff9900"
+
+#-- Alt Theme 3
+#set recolor_darkcolor #999
+#set recolor_lightcolor #333
 
 
 set render-loading "false"
 set scroll-step 50
+
 unmap f
 map f toggle_fullscreen
 map [fullscreen] f toggle_fullscreen
+
+unmap r
+map r rotate
+
+unmap R
+map R reload
+
+map <C-m> feedkeys ":set recolor false<Return>"
+map <C-M> feedkeys ":set recolor true<Return>"
+
+
+#-- Pkg needs patching...
+#map <C-1> feedkeys ":set recolor-lightcolor \\#ffffff"<Return> #":set recolor-darkcolor \#000000"<Return>
+#map <C-2> feedkeys ":set recolor-lightcolor \#0a0a12<Return>:set recolor-darkcolor \#ff9900<Return>"
+#map <C-3> feedkeys ":set recolor-lightcolor \#000000<Return>:set recolor-darkcolor \#00B800<Return>"
+#map <C-4> feedkeys ":set recolor-lightcolor \#002b36<Return>:set recolor-darkcolor \#839496<Return>"

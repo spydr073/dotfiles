@@ -1,0 +1,2 @@
+#!/bin/sh
+echo dmenu -i -fn 'Arial-10' -sb '#4E9258' -sf '#fff' -nb "#333" -h 22

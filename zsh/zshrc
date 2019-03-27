@@ -48,8 +48,10 @@ unsetopt nomatch                                 # allow [ or ] where ever you w
 autoload -U compinit && compinit                 # load autocompletions
 
 #-- Configure path
-#PATH="$HOME/bin:/run/current-system/sw/sbin:$PATH"
-PATH="$HOME/bin:$HOME/dotfiles/scripts/bin/:$PATH"
+PATH="$HOME/bin/:$HOME/dotfiles/scripts/bin/:$PATH"
+PATH="$HOME/dotfiles/scripts/dmenu_scripts/:$PATH"
+PATH="$HOME/bin/Zotero_linux-x86_64/:$PATH"
+PATH="$HOME/dotfiles/tmux/hooks/:$PATH"
 export -U PATH
 
 #}}}
@@ -72,15 +74,8 @@ function chpwd() {
 #---------------------------------------------------------------------------------------[ Aliases ]
 #{{{
 
-#-- nix envs
-alias env-idris='nix-shell ~/dotfiles/nix/env/idris.nix'
-
-#-- launch idris with local libraries in path
-#alias idris='idris -p effects -i ~/projects/idris'
-
-alias ls='ls --color -kLNosth'
+alias ll='ls --color -kLNosth'
 alias reload='source ~/.zshrc; clear'
-alias pp='ps axuf | pager'
 
 function stfs() { st -f "Source Code Pro for Powerline:pixelsize=$1"; }
 
@@ -88,21 +83,23 @@ alias copy='xclip -sel clip'
 alias pbcopy='xclip -selection c'
 alias pbpaste='xclip -selection clipboard -o'
 
-function chpwd() {
-  emulate -L zsh
-  ls --color -kLNost
-}
+function clip-sha256() { curl $1 | sha256sum | awk 'BEGIN{ORS=""}{print $1}' | xclip -selection c; }
 
-function tm() { tmux -2 -u new -s "$1" -n "$1"; }
-alias tmx='tm base'
+alias tm='tmux-hook.sh'
 
 function del () { mv -f $* ~/.trash/ }
 
 function psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto; }
 
-function search() { find . -iname "*$@*" | less; }
+function search() { find . -name "$1"; }
 
 function nix-search() { nix-env -qaP | grep -i "$1"; }
+
+function benchmark() { perf stat -r "$1" -B "$@"; }
+
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
 
 #}}}
 

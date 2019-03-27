@@ -37,6 +37,14 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_p),
      spawn myLauncher)
 
+    -- Spawn clipboard launcher.
+  , ((modMask .|. shiftMask, xK_p),
+     spawn myClipboard)
+
+    -- Spawn color select.
+  , ((modMask, xK_c),
+     spawn "/home/spydr/dotfiles/scripts/bin/getColor.sh")
+
     -- Take a selective screenshot.
   , ((modMask .|. shiftMask, xK_s),
      spawn mySelectScreenshot)
@@ -52,10 +60,10 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh increase")
 
     -- Adjust screen brightness
-  , ((0, 0x1008ff02),
-     spawn "light -A 10")
-  , ((0, 0x1008ff03),
-     spawn "light -U 10")
+  --, ((0, 0x1008ff02),
+  --   spawn "light -A 10")
+  --, ((0, 0x1008ff03),
+  --   spawn "light -U 10")
 
   --}
 

@@ -64,8 +64,13 @@ myfgColor_noWindows  = "#555555"
 
 
 -- XMobar Colors
-myfgColor_bar        = "#607d8b"
-mybgColor_bar        = "#282c32"
+--myfgColor_bar        = "#607d8b"
+--mybgColor_bar        = "#282c32"
+--myfgColor_bar        = "#a9fff1"
+myfgColor_bar        = "#555555"
+mybgColor_bar        = "#111617"
+--myfgColor_bar        = "#000000"
+--mybgColor_bar        = "#999999"
 
 myfgTagColor         = mybgColor_bar
 mybgTagColor         = "#000000"
@@ -78,6 +83,12 @@ myfgLowColor_bar     = "#555555"
 myfgMedColor_bar     = "#aaaaaa"
 myfgHighColor_bar    = "#ffffff"
 
+
+
+--}
+
+-----------------------------------------------------------------------------------------[ Themes ]
+--{1
 
 -- 8-Bit Color Theme
 colorBlk1 = "#252525" --Black
@@ -96,13 +107,8 @@ colorMag1 = "#7F355E" --Magenta
 colorMag2 = "#95618B"
 colorCyn1 = "#34676F" --Cyan
 colorCyn2 = "#5D858A"
-
---}
-
------------------------------------------------------------------------------------------[ Themes ]
---{1
-
 myTheme :: Theme
+
 myTheme = def
   { fontName            = myFont
   , inactiveBorderColor = colorBlk2
