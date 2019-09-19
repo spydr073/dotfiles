@@ -1,7 +1,9 @@
 #!/bin/sh
 
 pkill -u $USER -USR1 dunst
-i3lock-color -n -i $HOME/dotfiles/xmonad/wallpaper/circle_blur.png \
+i3lock-color -n \
+    -i $HOME/media/imgs/lock_screen_1/lock_small.png \
+#    -i $HOME/dotfiles/xmonad/wallpaper/circle_blur.png \
     --insidecolor=373445ff      \
     --ringcolor=ffffffff        \
     --line-uses-inside          \

@@ -5,8 +5,6 @@ pkgs: with pkgs; [
   imagemagick
 
   pulseaudioFull
-  #pavucontrol
-  #pulsemixer
   pamixer
 
   mpd
@@ -16,6 +14,7 @@ pkgs: with pkgs; [
   mplayer
   vlc
   python35Packages.youtube-dl
+  mopidy
 
   gimp
   zathura
@@ -23,5 +22,7 @@ pkgs: with pkgs; [
   slack
   keybase
   skype
+
+ (wine.override { wineBuild = "wineWow"; })
 
 ]

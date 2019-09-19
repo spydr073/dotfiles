@@ -1,40 +1,38 @@
-#!/run/current-system/sw/bin/bash
+#!/usr/bin/env bash
 
-flag=false
-case $1 in
-  "increase")
-    action="volume"
-    cmd="+2%"
-    ;;
-  "decrease")
-    action="volume"
-    cmd="-2%"
-    ;;
-  "mute")
-    action="mute"
-    cmd="toggle"
-    ;;
-  "get")
-    flag=true
-    ;;
-  *)
-    echo "Usage: set-vol [up|down|mute]"
-    exit 2
-    ;;
-esac
-
-if $flag ; then
+if [[ $1 = "get" ]]
+then
   if [[ "$(pamixer --get-mute)" = "true" ]]; then
-    echo "$(pamixer --get-volume)"
-    #echo "_"
+    echo "$(pamixer --get-volume)*"
   else
     echo "$(pamixer --get-volume)"
   fi
-else
-  for SINK in `pacmd list-sinks | grep 'index:' | cut -b12-`
+elif [[ $1 = "up" ]]
+then
+  for SINK in `pamixer --list-sinks | awk 'FNR==2 {print $1}'`
   do
-    pactl set-sink-$action $SINK $cmd
+    pamixer --sink $SINK -i 2
   done
+elif [[ $1 = "down" ]]
+then
+  for SINK in `pamixer --list-sinks | awk 'FNR==2 {print $1}'`
+  do
+    pamixer --sink $SINK -d 2
+  done
+elif [[ $1 = "mute" ]]
+then
+  for SINK in `pamixer --list-sinks | awk 'FNR==2 {print $1}'`
+  do
+    if [[ "$(pamixer --get-mute)" = "true" ]]
+    then
+      pamixer --sink $SINK -u
+    else
+      pamixer --sink $SINK -m
+    fi
+  done
+else
+    echo "Usage: set-vol [up|down|mute]"
+    exit 2
 fi
 
 

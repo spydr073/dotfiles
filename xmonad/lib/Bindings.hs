@@ -11,6 +11,7 @@ import XMonad
 import XMonad.Hooks.ManageDocks
 import qualified XMonad.StackSet as W
 
+import Control.Monad
 import System.Exit
 import qualified Data.Map as M
 
@@ -30,48 +31,44 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      spawn $ XMonad.terminal conf)
 
     -- Lock the screen
-  , ((modMask .|. controlMask, xK_l),
-     spawn myLockScreen)
+  , ((modMask .|. shiftMask, xK_x),
+     myConfirm "Confirm Lock Screen?" $ spawn myLockScreen)
 
     -- Spawn default launcher.
   , ((modMask, xK_p),
      spawn myLauncher)
 
     -- Spawn clipboard launcher.
-  , ((modMask .|. shiftMask, xK_p),
+  , ((modMask, xK_y),
      spawn myClipboard)
 
     -- Spawn color select.
   , ((modMask, xK_c),
-     spawn "/home/spydr/dotfiles/scripts/bin/getColor.sh")
+     spawn $ myBinDir ++ "getColor.sh")
 
     -- Take a selective screenshot.
-  , ((modMask .|. shiftMask, xK_s),
+  , ((modMask, xK_s),
      spawn mySelectScreenshot)
 
     -- Take a full screenshot
-  , ((modMask .|. controlMask .|. shiftMask, xK_S),
+  , ((modMask .|. shiftMask, xK_s),
      spawn myScreenshot)
 
     -- Adjust volume level.
-  , ((0, 0x1008ff11),
-     spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh decrease")
   , ((0, 0x1008ff13),
-     spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh increase")
-
-    -- Adjust screen brightness
-  --, ((0, 0x1008ff02),
-  --   spawn "light -A 10")
-  --, ((0, 0x1008ff03),
-  --   spawn "light -U 10")
+     spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh up")
+  , ((0, 0x1008ff11),
+     spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh down")
+  , ((0, 0x1008ff12),
+     spawn "/home/spydr/dotfiles/xmonad/scripts/volume.sh mute")
 
   --}
 
   --{2 Window management
 
     -- Close focused window.
-  , ((modMask .|. shiftMask, xK_c),
-     kill)
+  , ((modMask, xK_x),
+     myConfirm "Confirm Close Window?" kill)
 
     -- Cycle through the available layout algorithms.
   , ((modMask, xK_space),
@@ -82,12 +79,10 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      setLayout $ XMonad.layoutHook conf)
 
     -- Resize viewed windows to the correct size.
-  , ((modMask, xK_n),
+  , ((modMask, xK_r),
      refresh)
 
     -- Move focus to the next window.
-  , ((modMask, xK_Tab),
-     windows W.focusDown)
   , ((modMask, xK_j),
      windows W.focusDown)
 
@@ -100,7 +95,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      windows W.focusMaster  )
 
     -- Swap the focused window and the master window.
-  , ((modMask .|. shiftMask, xK_Return),
+  , ((modMask .|. shiftMask, xK_m),
      windows W.swapMaster)
 
     -- Swap the focused window with the next window.
@@ -135,12 +130,12 @@ myKeyBindings conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_b), sendMessage ToggleStruts)
 
     -- Quit xmonad
-  , ((modMask .|. shiftMask, xK_q),
-     io (exitWith ExitSuccess))
+  --, ((modMask .|. shiftMask, xK_q),
+  --   io (exitWith ExitSuccess))
 
     -- Restart xmonad and xmobar
   , ((modMask .|. shiftMask, xK_r),
-     spawn "/home/spydr/dotfiles/scripts/bin/reloadXMonad.sh")
+     myConfirm "Confirm restart?" $ spawn $ myBinDir ++ "reloadXMonad.sh")
 
   --}
   ]

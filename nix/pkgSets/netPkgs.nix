@@ -4,10 +4,16 @@ pkgs: with pkgs; [
   lsof
   iptables
   wirelesstools
+  macchanger
+
+  lighttpd
+
   wget
+  aria
+
   nmap
   tcpdump
-  macchanger
+
   dnsmasq
   dnsutils
 

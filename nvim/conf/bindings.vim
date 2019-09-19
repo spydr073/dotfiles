@@ -128,7 +128,7 @@ inoremap <M-!> ¬
 "----------------------------------------------------------------------------------[ Command Mode ]
 "--{1
 
-cnoremap w!! w !sudo tee % >/dev/null|               " write to read only files
+cnoremap w!! w suda://%|                             " write to read only files
 
 cnoremap <C-a>  <Home>|                              " move cursor to begining
 cnoremap <C-b>  <Left>|                              " move cursor to left

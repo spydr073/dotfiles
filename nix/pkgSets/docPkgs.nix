@@ -18,7 +18,7 @@ pkgs: with pkgs; [
   (texlive.combine { inherit (texlive)
     scheme-medium algorithms graphics
     xcolor unicode-math url hyperref
-    beamer etoolbox mdframed
+    beamer etoolbox mdframed pstricks
     needspace booktabs caption
     listings tabulary setspace
     translator fancyvrb tikz-cd
@@ -27,7 +27,9 @@ pkgs: with pkgs; [
     raleway lato pgfplots relsize
     float capt-of placeins biblatex
     logreq xstring standalone xkeyval
-    collection-fontsrecommended;
+    collection-fontsrecommended
+    auto-pst-pdf ifplatform pst-pdf
+    preview environ trimspaces;
   })
 
 ]

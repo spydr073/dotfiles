@@ -18,6 +18,7 @@ pkgs: with pkgs; [
 
   #-- Bluetooth
   bluez
+  bluez-tools
   blueman
 
   #-- Compression

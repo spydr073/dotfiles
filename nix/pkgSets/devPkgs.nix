@@ -1,6 +1,10 @@
 pkgs: with pkgs; [
 
   gcc
+  xxd
+
+  gtk2
+  boost
 
   haskellPackages.ghc
 
@@ -16,6 +20,8 @@ pkgs: with pkgs; [
   st
   tmux
   neovim
+
+  docker
 
 ]
 

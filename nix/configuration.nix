@@ -6,7 +6,7 @@
 
 let
 
-  version = "18.09"; #-- Jellyfish
+  version = "19.03"; #-- Koi
   home    = "/home/spydr";
   dotfiles = "${home}/dotfiles";
 
@@ -44,7 +44,6 @@ in  {
     initrd = {
       luks.devices = [
         { name = "root";
-          #device = "/dev/sda2";
           device = "/dev/nvme0n1p2";
           allowDiscards = true;
           preLVM = true;
@@ -109,16 +108,23 @@ in  {
     };
 
     pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
+      enable       = true;
+      systemWide   = true;
       support32Bit = true;
-      #extraConfig = ''
-      #  load-module module-switch-on-connect
+      package      = pkgs.pulseaudioFull;
+      zeroconf.discovery.enable = true;
+      #configFile = pkgs.writeText "default.pa" ''
+
       #'';
     };
 
-    bluetooth.enable = true;
-
+    bluetooth = {
+      enable = true;
+      extraConfig = ''
+        [General]
+        Enable=Source,Sink,Media,Socket
+      '';
+    };
  };
 
 #}
@@ -129,7 +135,20 @@ in  {
   networking = {
     hostName   = "blackbox";
     enableIPv6 = true;
-    extraHosts = builtins.readFile "${dotfiles}/nix/network/hosts/block.hosts";
+    extraHosts =
+      ''127.0.0.1	        localhost
+        127.0.0.1	        localhost.localdomain
+        255.255.255.255	  broadcasthost
+        ::1		            localhost
+        127.0.0.1	        local
+        ::1		            ip6-localhost ip6-loopback
+        fe00::0		        ip6-localnet
+        ff00::0		        ip6-mcastprefix
+        ff02::1		        ip6-allnodes
+        ff02::2		        ip6-allrouters
+        ff02::3		        ip6-allhosts
+      '' +
+      (builtins.readFile "${dotfiles}/nix/network/hosts/block.hosts");
 
     networkmanager = {
       enable = true;
@@ -269,8 +288,13 @@ in  {
                         "power"
                         "lp"
                         "systemd-journal"
+                        "docker"
+                        "wwwrun"
                       ];
   };
+
+  users.extraUsers.nginx.extraGroups = [ "users" ];
+  users.extraGroups.vboxusers.members = [ "spydr" ];
 
 #}
 
@@ -309,6 +333,15 @@ in  {
       };
     };
   };
+
+  virtualisation = {
+    docker.enable = true;
+    virtualbox.host = {
+      enable = true;
+      enableExtensionPack = true;
+    };
+  };
+
 
   services = {
 
@@ -383,6 +416,33 @@ in  {
        '';
     };
 
+    dnsmasq = {
+      enable              = true;
+      resolveLocalQueries = true;
+      servers = [
+        "1.1.1.1"         #-- cloudflare primary
+        "1.0.0.1"         #-- cloudlfare secondary
+
+        #"8.8.8.8"         #-- google primary
+        #"8.8.4.4"         #-- google secondary
+
+        #"9.9.9.9"         #-- quad9 primary
+        #"149.112.112.112" #-- quad9 secondary
+      ];
+      extraConfig = ''
+        address=/loc/127.0.0.1
+      '';
+    };
+
+    nginx = {
+      enable = true;
+      recommendedGzipSettings  = true;
+      recommendedOptimisation  = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings   = true;
+      virtualHosts."homepage.loc" = { root = "/srv/www/homepage"; };
+    };
+
     actkbd = {
       enable = true;
       bindings = [
@@ -411,6 +471,42 @@ in  {
       '';
     };
 
+    mopidy = {
+      #-- Get auth info from https://www.mopidy.com/authenticate/
+      enable = true;
+      extensionPackages = [ pkgs.mopidy-mopify
+                            pkgs.mopidy-spotify
+                            pkgs.mopidy-spotify-tunigo
+                          ];
+      configuration = ''
+        [mpd]
+        hostname = ::
+
+        [stream]
+        enabled = true
+        protocols =
+            http
+            https
+            mms
+            rtmp
+            rtmps
+            rtsp
+        timeout = 5000
+        metadata_blacklist =
+
+        [audio]
+        output = tee name=t ! queue ! autoaudiosink t. ! queue ! udpsink port=6600
+
+        [spotify]
+        client_id = c5544626-238d-435a-ac7f-72b4587f60ad
+        client_secret = SsLWFyS50uNvIoDIzyxLWC9ozp51NoOf2S_Fz6Y18H0=
+
+        [spotify_web]
+        client_id = c5544626-238d-435a-ac7f-72b4587f60ad
+        client_secret = SsLWFyS50uNvIoDIzyxLWC9ozp51NoOf2S_Fz6Y18H0=
+      '';
+    };
+
     xserver = {
       enable = true;
       layout = "us";
@@ -422,6 +518,11 @@ in  {
       windowManager.xmonad = {
         enable = true;
         enableContribAndExtras = true;
+        extraPackages = haskellPackages: [
+            haskellPackages.xmonad
+            haskellPackages.xmonad-extras
+            haskellPackages.xmonad-contrib
+        ];
       };
 
       libinput = {
@@ -437,38 +538,45 @@ in  {
 
       displayManager = {
 
-        lightdm.greeters.mini = {
+        lightdm = {
           enable = true;
-          user   = "spydr";
 
-          extraConfig = ''
-            [greeter]
-            show-password-label = false
-            password-label-text =
-            show-input-cursor = false
+          autoLogin = {
+            enable = true;
+            user   = "spydr";
+          };
 
-            [greeter-hotkeys]
-            mod-key = meta
-            shutdown-key = s
-            restart-key = r
-            hibernate-key = h
-            suspend-key = u
+          greeters.mini = {
+            enable           = true;
+            user             = "spydr";
+            extraConfig = ''
+              [greeter]
+              show-password-label = true
+              password-label-text = "PW"
+              show-input-cursor   = false
 
-            [greeter-theme]
-            font = Sans
-            font-size = 1em
-            text-color = "#080800"
-            error-color = "#F8F8F0"
-            #background-image = ${wallpaper}
-            background-image = ""
-            background-color = "#000000"
-            window-color = "#000000"
-            border-color = "#222222"
-            border-width = 1px
-            layout-space = 0
-            password-color = "#77dd88"
-            password-background-color = "#000000"
-          '';
+              [greeter-hotkeys]
+              mod-key       = meta
+              shutdown-key  = s
+              restart-key   = r
+              hibernate-key = h
+              suspend-key   = u
+
+              [greeter-theme]
+              font                      = Sans
+              font-size                 = 1em
+              text-color                = "#080800"
+              error-color               = "#F8F8F0"
+              #background-image         = ${wallpaper}
+              background-color          = "#000000"
+              window-color              = "#000000"
+              border-color              = "#222222"
+              border-width              = 1px
+              layout-space              = 0
+              password-color            = "#77dd88"
+              password-background-color = "#000000"
+            '';
+          };
         };
 
         sessionCommands = ''

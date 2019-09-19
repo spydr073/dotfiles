@@ -43,6 +43,7 @@ set runtimepath+=~/dotfiles/nvim/plugins/repos/github.com/Shougo/dein.vim
 if dein#load_state(expand('~/dotfiles/nvim/plugins/'))
   call dein#begin(expand('~/dotfiles/nvim/plugins/'))
     call dein#add('Shougo/dein.vim')
+    call dein#add('lambdalisue/suda.vim')
     call dein#add('scrooloose/nerdtree')
     call dein#add('idris-hackers/idris-vim.git')
     call dein#add('LnL7/vim-nix')
