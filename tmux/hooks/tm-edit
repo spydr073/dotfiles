@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+
+tmux send-keys    "nix-shell" C-m
+tmux split-window -h -c "#{pane_current_path}"
+tmux send-keys    "nix-shell" C-m
+tmux resize-pane  -L 12
+tmux split-window -v -c "#{pane_current_path}"
+tmux send-keys    "nix-shell" C-m
+tmux select-pane  -t 0
+
