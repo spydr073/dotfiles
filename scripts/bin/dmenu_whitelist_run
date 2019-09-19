@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#-- original
+#--dmenu_path | dmenu "$@" | ${SHELL:-"/bin/sh"} &
+
+#-- whitelist version
+cat "${HOME}/dotfiles/dmenu/whitelist.txt" | dmenu "$@" | ${SHELL:-"/bin/sh"} &

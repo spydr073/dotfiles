@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+curl https://someonewhocares.org/hosts/zero/hosts \
+  > ${HOME}/dotfiles/nix/network/hosts/block.hosts \
+  2>/dev/null
+
+notify-send "Updated hosts file!" "Rebuild system to apply."
+
