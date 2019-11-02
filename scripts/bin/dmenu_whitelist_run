@@ -2,6 +2,11 @@
 
 #-- original
 #--dmenu_path | dmenu "$@" | ${SHELL:-"/bin/sh"} &
+#	| dmenu -z -q -o 0.8 -dim 0.5 -dc "#420d09" "$@" \
 
 #-- whitelist version
-cat "${HOME}/dotfiles/dmenu/whitelist.txt" | dmenu "$@" | ${SHELL:-"/bin/sh"} &
+cat "${HOME}/dotfiles/dmenu/whitelist.txt" \
+	| dmenu "$@" \
+	| ${SHELL:-"/bin/sh"} &
+
+

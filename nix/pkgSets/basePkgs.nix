@@ -1,15 +1,21 @@
 pkgs: with pkgs;
 
 [
-
-  sudo
   manpages
   binutils
   gnumake
-  stdenv
-  nix
+  cmake
 
+  nix
+  stdenv
+  makeWrapper
+
+  zlib
+  file
+
+  sudo
   pass
   gnupg
+  openssl_1_1
 
 ]

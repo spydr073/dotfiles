@@ -6,7 +6,7 @@
 
 let
 
-  version = "19.03"; #-- Koi
+  version = "19.09"; #-- Loris
   home    = "/home/spydr";
   dotfiles = "${home}/dotfiles";
 
@@ -37,7 +37,7 @@ in  {
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion        = "${version}";
-  system.autoUpgrade.enable  = true;
+  system.autoUpgrade.enable  = false;
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-${version}";
 
   boot = {
@@ -113,18 +113,8 @@ in  {
       support32Bit = true;
       package      = pkgs.pulseaudioFull;
       zeroconf.discovery.enable = true;
-      #configFile = pkgs.writeText "default.pa" ''
-
-      #'';
     };
 
-    bluetooth = {
-      enable = true;
-      extraConfig = ''
-        [General]
-        Enable=Source,Sink,Media,Socket
-      '';
-    };
  };
 
 #}
@@ -196,7 +186,8 @@ in  {
 
   # Set your time zone.
   #time.timeZone = "America/Denver";
-  time.timeZone = "Europe/Madrid";
+  #time.timeZone = "Europe/Madrid";
+  time.timeZone = "Europe/Berlin";
 
 #}
 
@@ -240,6 +231,7 @@ in  {
     overlays = [
       (import ./overlays/getc.nix)
       (import ./overlays/st.nix)
+      #(import ./overlays/extras.nix)
       #(import ./overlays/tabbed.nix)
       #(import ./overlays/surf.nix)
     ];
@@ -249,7 +241,7 @@ in  {
   environment = {
 
     variables = {
-      BROWSER = pkgs.lib.mkOverride 0 "qutebrowser";
+      BROWSER = pkgs.lib.mkOverride 0 "firefox";
       EDITOR  = pkgs.lib.mkOverride 0 "nvim";
     };
 
@@ -447,8 +439,8 @@ in  {
       enable = true;
       bindings = [
         #-- subtract 8 to get correct keycode - not sure why...
-        { keys = [ 224 ]; events = [ "key" ]; command = "/run/wrappers/bin/light -U 10"; }
-        { keys = [ 225 ]; events = [ "key" ]; command = "/run/wrappers/bin/light -A 10"; }
+        { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 10"; }
+        { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 10"; }
       ];
     };
 
@@ -461,6 +453,7 @@ in  {
       dataDir        = "${home}/.config/mpd";
 
       extraConfig = ''
+        auto_update "yes"
         audio_output {
           type            "pulse"
           name            "pulse audio"
@@ -468,42 +461,6 @@ in  {
           mixer_device		"default"
 	        mixer_control		"PCM"
 	      }
-      '';
-    };
-
-    mopidy = {
-      #-- Get auth info from https://www.mopidy.com/authenticate/
-      enable = true;
-      extensionPackages = [ pkgs.mopidy-mopify
-                            pkgs.mopidy-spotify
-                            pkgs.mopidy-spotify-tunigo
-                          ];
-      configuration = ''
-        [mpd]
-        hostname = ::
-
-        [stream]
-        enabled = true
-        protocols =
-            http
-            https
-            mms
-            rtmp
-            rtmps
-            rtsp
-        timeout = 5000
-        metadata_blacklist =
-
-        [audio]
-        output = tee name=t ! queue ! autoaudiosink t. ! queue ! udpsink port=6600
-
-        [spotify]
-        client_id = c5544626-238d-435a-ac7f-72b4587f60ad
-        client_secret = SsLWFyS50uNvIoDIzyxLWC9ozp51NoOf2S_Fz6Y18H0=
-
-        [spotify_web]
-        client_id = c5544626-238d-435a-ac7f-72b4587f60ad
-        client_secret = SsLWFyS50uNvIoDIzyxLWC9ozp51NoOf2S_Fz6Y18H0=
       '';
     };
 

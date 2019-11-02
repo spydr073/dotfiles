@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libX11}:
+{ stdenv, fetchgit, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "getc-1.0.2";

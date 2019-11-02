@@ -16,11 +16,6 @@ pkgs: with pkgs; [
   iotop
   tree
 
-  #-- Bluetooth
-  bluez
-  bluez-tools
-  blueman
-
   #-- Compression
   p7zip
   zip
@@ -28,5 +23,9 @@ pkgs: with pkgs; [
   gzip
   unrar
   zlib
+
+  #-- XDG
+  xdg_utils
+  shared_mime_info
 
 ]

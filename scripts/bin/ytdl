@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+MUSIC="$HOME/media/music/"
+
+if [[ "$#" -ne 3 ]]; then
+  echo -e "Expected usage: ytdl [name] [artist] [link]"
+  exit 1
+fi
+
+if [[ ! -d "$MUSIC" ]]; then
+  echo -e "Music directory $MUSIC does not exist."
+  echo -e "Creating directory..."
+  mkdir -p $MUSIC
+fi
+
+NAME=$1
+ARTIST=$2
+LINK=$3
+OUT="$MUSIC/$ARTIST/$NAME"
+
+if ls $OUT.* 1> /dev/null 2>&1; then
+  echo -e "File exists!"
+  exit 1
+fi
+
+if [[ ! -d "$MUSIC/$ARTIST" ]]; then
+  echo -e "Adding artist $ARTIST..."
+  mkdir -p $MUSIC/$ARTIST
+fi
+
+echo -e "Adding $NAME to library..."
+
+if youtube-dl --extract-audio --audio-format mp3 -o "$OUT.%(ext)s" $LINK; then
+  exit 0
+else
+  echo -e "Download failed!"
+  exit 1
+fi
+
+

@@ -4,7 +4,9 @@ pkgs: with pkgs; [
   xxd
 
   gtk2
+  qt5.full
   boost
+  openmpi
 
   haskellPackages.ghc
 
@@ -13,6 +15,8 @@ pkgs: with pkgs; [
   idrisPackages.contrib
 
   python3
+
+  jdk
 
   gitAndTools.gitFull
   bash
