@@ -2,7 +2,6 @@
 *.o
 *.hi
 *.errors
-*.ibc
 
 nvim/plugins
 
@@ -11,11 +10,6 @@ xmonad/xmonad.state
 xmonad/info_bars/genbar
 xmonad/info_bars/xmobar.conf
 
-emacs/backup
-emacs/custom.el
-emacs/elpa
-emacs/eshell
-emacs/undohist
-emacs/var
-
+scripts/bin/RevStudio
+scripts/bin/rb
 
