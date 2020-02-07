@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+TEMPLATE="${HOME}/dotfiles/templates/cpp"
+
+if [[ "$#" -ne 1 ]]; then
+    echo -e "expected usage : initCC [project-name]"
+    exit
+fi
+PROJECT=$1
+
+mkdir ${PROJECT}
+cd ${PROJECT}
+
+echo -e "# ${FULLNAME}\n\n" > readme.md
+cp ${TEMPLATE}/../license/gpl3.license  license
+cp ${TEMPLATE}/cpp.gitignore .gitignore
+${TEMPLATE}/makefile_init.sh ${PROJECT}
+
+mkdir src
+mkdir src/${PROJECT}
+${TEMPLATE}/main_init.sh ${PROJECT}
+
+mkdir include
+mkdir include/${PROJECT}
+
+mkdir lib
+mkdir bin
+mkdir docs
+mkdir tests
+
+git init
+git add -A
+git commit -m "initial commit for project ${PROJECT}"
+
+
+
