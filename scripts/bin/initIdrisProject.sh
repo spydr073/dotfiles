@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TEMPLATE="${HOME}/dotfiles/templates"
+TEMPLATE="${HOME}/dotfiles/templates/idris"
 
 read -p "Project Directory Name: " PROJECT
 read -p "Project Package Name: " PKGNAME
@@ -10,8 +10,8 @@ mkdir ${PROJECT}
 cd ${PROJECT}
 
 echo -e "# ${FULLNAME}\n\n"   > readme.md
-cp ${TEMPLATE}/agpl3.license    LICENSE
-cp ${TEMPLATE}/idris.gitignore  .gitignore
+cp ${TEMPLATE}/../license/agpl3.license LICENSE
+cp ${TEMPLATE}/idris.gitignore .gitignore
 
 mkdir src
 
