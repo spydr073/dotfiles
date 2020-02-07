@@ -102,9 +102,10 @@ in  {
     sane.enable = true;
 
     opengl = {
+      enable          = true;
       driSupport32Bit = true;
-      extraPackages   = [ pkgs.vaapiIntel ];
-      extraPackages32 = [ pkgs.vaapiIntel ];
+      extraPackages   = with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-ocl beignet ];
+      extraPackages32 = with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau ];
     };
 
     pulseaudio = {
@@ -231,6 +232,7 @@ in  {
     overlays = [
       (import ./overlays/getc.nix)
       (import ./overlays/st.nix)
+      (import ./overlays/beagle.nix)
       #(import ./overlays/extras.nix)
       #(import ./overlays/tabbed.nix)
       #(import ./overlays/surf.nix)
@@ -491,7 +493,6 @@ in  {
       };
 
       videoDrivers = [ "intel" ];
-      #videoDrivers = [ "intel" "nvidia" ];
 
       displayManager = {
 

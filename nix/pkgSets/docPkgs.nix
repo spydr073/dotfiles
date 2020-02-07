@@ -29,7 +29,9 @@ pkgs: with pkgs; [
     logreq xstring standalone xkeyval
     collection-fontsrecommended
     auto-pst-pdf ifplatform pst-pdf
-    preview environ trimspaces;
+    preview environ trimspaces
+    harpoon anyfontsize tikz-qtree
+    multirow lastpage;
   })
 
 ]

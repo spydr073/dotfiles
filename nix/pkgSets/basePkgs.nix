@@ -6,6 +6,8 @@ pkgs: with pkgs;
   gnumake
   cmake
 
+  pciutils
+
   nix
   stdenv
   makeWrapper

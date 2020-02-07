@@ -3,6 +3,7 @@ pkgs: with pkgs; [
   #-- System
   xclip
   clipmenu
+  fzf
 
   #-- Screens
   arandr

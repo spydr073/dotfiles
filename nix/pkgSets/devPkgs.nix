@@ -1,12 +1,19 @@
 pkgs: with pkgs; [
 
   gcc
+  gdb
   xxd
+
+  eigen
+  boost
+  openmpi
+  opencl-headers
+  opencl-clhpp
+  opencl-icd
+  opencl-info
 
   gtk2
   qt5.full
-  boost
-  openmpi
 
   haskellPackages.ghc
 
