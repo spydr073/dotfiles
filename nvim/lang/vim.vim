@@ -13,7 +13,7 @@ function! SetVimOpts()
   setlocal tabstop=2
 
   setlocal foldmarker=\"--{,\"--}
-  nnoremap <buffer> <Leader>h :call Section("\"")<CR>
+  nnoremap <buffer> <Leader>h :call Section('"--')<CR>
 
 endfunction
 

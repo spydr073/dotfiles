@@ -44,7 +44,12 @@ if dein#load_state(expand('~/dotfiles/nvim/plugins/'))
   call dein#begin(expand('~/dotfiles/nvim/plugins/'))
     call dein#add('Shougo/dein.vim')
     call dein#add('lambdalisue/suda.vim')
+
+    "call dein#add('ctrlpvim/ctrlp.vim')
+    call dein#add('junegunn/fzf')
     call dein#add('scrooloose/nerdtree')
+
+    call dein#add('octol/vim-cpp-enhanced-highlight')
     call dein#add('idris-hackers/idris-vim.git')
     call dein#add('LnL7/vim-nix')
   call dein#end()
@@ -113,6 +118,9 @@ if has("autocmd")
 
   "-- shell settings
   source /home/spydr/dotfiles/nvim/lang/shell.vim
+
+  "-- c/c++ settings
+  source /home/spydr/dotfiles/nvim/lang/clang.vim
 
   "-- haskell settings
   source /home/spydr/dotfiles/nvim/lang/haskell.vim
