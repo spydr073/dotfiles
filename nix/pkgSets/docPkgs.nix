@@ -31,7 +31,7 @@ pkgs: with pkgs; [
     auto-pst-pdf ifplatform pst-pdf
     preview environ trimspaces
     harpoon anyfontsize tikz-qtree
-    multirow lastpage;
+    multirow lastpage texshade;
   })
 
 ]

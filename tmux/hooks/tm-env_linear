@@ -1,0 +1,48 @@
+#! /usr/bin/env zsh
+
+SESSION="linear-env"
+
+SESSIONEXISTS=$(tmux list-sessions | grep $SESSION)
+
+if [ "$SESSIONEXISTS" = "" ]; then
+
+    cd $HOME/projects/linear
+    tmux new-session   -d -s $SESSION
+
+    # Select pane 0 and set dir
+    tmux selectp       -t 0
+    #tmux send-keys "clear" C-m
+
+    # Split pane 0 horizontal by 35%, start nix-shell
+    tmux splitw        -h -p 65 -c "#{pane_current_path}"
+    #tmux send-keys "nix-shell" C-m
+
+    # Select pane 1 and split vertically by 80%
+    tmux selectp       -t 1
+    tmux splitw        -v -p 20 -c "#{pane_current_path}"
+
+    # create a new window called scratch
+    tmux new-window    -t $SESSION:1 -n scratch
+
+    # return to main window and start vim
+    tmux select-window -t $SESSION:0
+    tmux select-pane   -t 0
+    sleep 0.1
+    tmux send-keys     "nvim src/*.cc include/*.hh" C-m
+    sleep 0.1
+
+    #tmux new-window   -n "linear"
+    #tmux send-keys    "cd $BASEDIR" C-m
+    #tmux split-window -h -c "#{pane_current_path}"
+    #tmux send-keys    "cd $BASEDIR" C-m
+    #tmux send-keys    "nix-shell" C-m
+    #tmux resize-pane  -L 12
+    #tmux split-window -v -c "#{pane_current_path}"
+    #tmux send-keys    "cd $BASEDIR" C-m
+    #tmux select-pane  -t 0
+    #tmux send-keys    "nvim src/* include/*" C-m
+
+fi
+
+tmux attach-session -t $SESSION
+

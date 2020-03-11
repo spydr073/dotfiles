@@ -14,11 +14,31 @@ nnoremap <S-r> :so ~/dotfiles/nvim/init.vim<CR>|     " reload config file
 
 nnoremap <Bslash> :|                                 " remap cmd mode
 
-nnoremap <Leader>b :ls<CR>:b<Space>|                 " better buffer switching
-nnoremap <Leader>] :bn<CR>|                          " next buffer
-nnoremap <Leader>[ :bp<CR>|                          " previous buffer
+nnoremap <Leader>f :GFiles<CR>|                      " fzf git tracked files
+nnoremap <Leader>F :Files<CR>|                       " fzf all files
 
-nnoremap <Leader>f :NERDTreeToggle<CR>|              " toggle nerdtree
+nnoremap <Leader>b :Buffers<CR>|                     " fzf buffers
+nnoremap <Leader>h :History<CR>|                     " fzf open buffer history
+
+nnoremap <Leader>t :BTags<CR>|                       " fzf search tags current buffer
+nnoremap <Leader>T :Tags<CR>|                        " fzf search tags all buffers
+
+nnoremap <Leader>l :BLines<CR>|                      " fzf search lines current buffer
+nnoremap <Leader>L :Lines<CR>|                       " fzf search lines all buffers
+nnoremap <Leader>' :Marks<CR>|                       " fzf search marked lines
+
+nnoremap <Leader>/ :Rg<Space>|                       " fzf search with ripgrep
+
+nnoremap <Leader>H :Helptags!<CR>|                   " fzf vim help tags
+nnoremap <Leader>C :Commands<CR>|                    " fzf vim commands
+nnoremap <Leader>: :History:<CR>|                    " fzf vim command history
+
+
+"nnoremap <Leader>b :ls<CR>:b<Space>|                 " better buffer switching
+"nnoremap <Leader>] :bn<CR>|                          " next buffer
+"nnoremap <Leader>[ :bp<CR>|                          " previous buffer
+
+"nnoremap <Leader>f :NERDTreeToggle<CR>|              " toggle nerdtree
 
 nnoremap <Leader><Space> za|                         " toggle folds
 
@@ -26,7 +46,7 @@ nnoremap <Leader>n :call NumberToggle()<CR>|         " toggle relative line numb
 
 nnoremap <Leader>s :call SpellToggle()<CR>|          " toggle spell mode
 
-nnoremap <Leader>e :e |                              " open file
+"nnoremap <Leader>e :e |                              " open file
 nnoremap <Leader>w :w<CR>|                           " write file
 
 nnoremap <C-r> :redo<CR>|                            " reverse undo operation

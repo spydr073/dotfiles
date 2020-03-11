@@ -38,15 +38,16 @@ set mouse-=a
 "---------------------------------------------------------------------------------------[ Plugins ]
 "--{1
 
-"-- Run ':call dein#install()' to install plugins.
 set runtimepath+=~/dotfiles/nvim/plugins/repos/github.com/Shougo/dein.vim
 if dein#load_state(expand('~/dotfiles/nvim/plugins/'))
   call dein#begin(expand('~/dotfiles/nvim/plugins/'))
     call dein#add('Shougo/dein.vim')
     call dein#add('lambdalisue/suda.vim')
 
-    "call dein#add('ctrlpvim/ctrlp.vim')
-    call dein#add('junegunn/fzf')
+    call dein#add('junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --no-bash' })
+    call dein#add('junegunn/fzf.vim')
+    call dein#add('tpope/vim-fugitive')
+
     call dein#add('scrooloose/nerdtree')
 
     call dein#add('octol/vim-cpp-enhanced-highlight')
@@ -92,6 +93,9 @@ if has("autocmd")
 
   augroup default
     autocmd!
+
+    " use escape to dismiss fzf window
+    autocmd FileType fzf tnoremap <buffer> <Esc> <Esc>
 
     " goto last time edited line
     autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif

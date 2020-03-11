@@ -7,8 +7,8 @@ function! NumberToggle()
     set number!
     set relativenumber
   else
-    set norelativenumber
     set number
+    set norelativenumber
   endif
 endfunc
 

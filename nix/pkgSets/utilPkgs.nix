@@ -4,6 +4,9 @@ pkgs: with pkgs; [
   xclip
   clipmenu
   fzf
+  ripgrep
+  fd
+  bat
 
   #-- Screens
   arandr

@@ -6,6 +6,7 @@ set ttyfast
 set autoread
 set ruler
 set hidden
+set relativenumber
 
 set formatoptions+=j    " Delete comment character when joining commented lines
 
