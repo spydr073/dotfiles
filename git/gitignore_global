@@ -1,0 +1,11 @@
+*.o       #-- object
+*.a       #-- archive
+*.so      #-- shared lib
+*.hi      #-- haskell intermediate
+*.ibc     #-- idris compiled
+*.aux     #-- auxillary
+
+build/    #-- build folder
+out/      #-- out folder
+
+

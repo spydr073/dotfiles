@@ -5,8 +5,12 @@ pkgs: with pkgs; [
   clipmenu
   fzf
   ripgrep
+  tldr
   fd
   bat
+  st
+  tmux
+  neovim
 
   #-- Screens
   arandr

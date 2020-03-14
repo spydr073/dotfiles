@@ -4,8 +4,6 @@ pkgs: with pkgs; [
   gdb
   xxd
 
-  eigen
-  boost
   openmpi
   opencl-headers
   opencl-clhpp
@@ -26,11 +24,10 @@ pkgs: with pkgs; [
   jdk
 
   gitAndTools.gitFull
+  gitAndTools.diff-so-fancy
+
   bash
   zsh
-  st
-  tmux
-  neovim
 
   docker
 

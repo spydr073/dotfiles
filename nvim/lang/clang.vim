@@ -13,7 +13,8 @@ function! SetCLangOpts()
   setlocal copyindent
   setlocal shiftwidth=4
   setlocal tabstop=4
-  setlocal textwidth=99
+  "setlocal textwidth=99
+  setlocal nowrap
 
   setlocal foldenable
   setlocal foldmethod=marker

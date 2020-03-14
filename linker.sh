@@ -42,4 +42,6 @@ ln -sv "$DOTFILES/zathura" "$HOME/.config/zathura"
 ln -sv "$DOTFILES/qutebrowser" "$HOME/.config/qutebrowser"
 
 
+#-- Link Gitconfig file
+ln -sv "$DOTFILES/git/gitconfig" "$HOME/.gitconfig"
 

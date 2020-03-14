@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+if [ "$#" == "1" ]; then
+    SEL=$((fd $1  $HOME) | fzf -m --preview 'bat --color "always" {}' --bind='ctrl-c:abort')
+elif [ "$#" == "2" ]; then
+    SEL=$((fd $1  $2) | fzf -m --preview 'bat --color "always" {}' --bind='ctrl-c:abort')
+else
+    SEL=""
+fi
+
+if [ -n "$SEL" ]; then
+    nvim $SEL
+else
+    exit 1
+fi
+
+
